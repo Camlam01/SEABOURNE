@@ -7,11 +7,21 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class SirenSongCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
-    public SirenSongCard() : base(2, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy) { }
+
+    private int _tranceAmount = 2;
+
+    public SirenSongCard() : base(2, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await SeabornePowerTools.ApplyPowerToTarget(cardPlay.Target!, "Seaborne:Trance", IsSeaborneUpgraded ? 3 : 2);
+        await SeabornePowerTools.ApplyPowerToTarget(cardPlay.Target!, "Seaborne:Trance", ModifyGemStacks(_tranceAmount));
+    }
+
+    protected override void OnUpgrade()
+    {
+        _tranceAmount = 3;
     }
 }

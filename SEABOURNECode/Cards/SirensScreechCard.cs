@@ -7,12 +7,22 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class SirensScreechCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
-    public SirensScreechCard() : base(3, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+
+    private int _tranceAmount = 3;
+
+    public SirensScreechCard() : base(3, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await SeaborneCardTools.ApplyTrance(cardPlay.Target!, ModifyGemStacks(IsSeaborneUpgraded ? 4 : 3));
+        await SeaborneCardTools.ApplyTrance(cardPlay.Target!, ModifyGemStacks(_tranceAmount));
+    }
+
+    protected override void OnUpgrade()
+    {
+        _tranceAmount = 4;
     }
 
     private async Task OnReeled()

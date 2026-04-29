@@ -7,16 +7,25 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class EntrancingMelodyCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
-    public EntrancingMelodyCard() : base(2, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy) { }
+
+    private int _repeats = 2;
+
+    public EntrancingMelodyCard() : base(2, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        int repeats = IsSeaborneUpgraded ? 3 : 2;
 
-        for (int index = 0; index < repeats; index++)
+        for (int index = 0; index < _repeats; index++)
         {
             await SeaborneCardTools.ApplyTrance(cardPlay.Target!, ModifyGemStacks(3));
         }
+    }
+
+    protected override void OnUpgrade()
+    {
+        _repeats = 3;
     }
 }

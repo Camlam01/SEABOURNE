@@ -1,7 +1,5 @@
-using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using SEABOURNE.SEABOURNECode.Powers;
 using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
@@ -9,7 +7,10 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class HookshotCard : SeaborneCard
 {
     public override bool HasAttackDamage => true;
-    public HookshotCard() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy) { }
+
+    public HookshotCard() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -20,6 +21,6 @@ public sealed class HookshotCard : SeaborneCard
 
     protected override void OnUpgrade()
     {
-        SeaborneCost = 1;
+        SetBaseCost(1);
     }
 }

@@ -9,7 +9,9 @@ public sealed class XMarksTheSpotCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
 
-    public XMarksTheSpotCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.None) { }
+    public XMarksTheSpotCard() : base(1, CardType.Power, CardRarity.Rare, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -21,6 +23,6 @@ public sealed class XMarksTheSpotCard : SeaborneCard
 
     protected override void OnUpgrade()
     {
-        SeaborneCost = 0;
+        SetBaseCost(0);
     }
 }

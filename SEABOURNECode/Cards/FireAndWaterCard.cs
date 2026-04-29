@@ -10,14 +10,23 @@ public sealed class FireAndWaterCard : SeaborneCard
 {
     public override bool HasAttackDamage => true;
 
-    public FireAndWaterCard() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    private string _gemPowerId = RubyGemPower.Id;
+
+    public FireAndWaterCard() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await SeaborneCardTools.AcquireGem(IsSeaborneUpgraded ? SapphireGemPower.Id : RubyGemPower.Id);
+        await SeaborneCardTools.AcquireGem(_gemPowerId);
         await DamageCmd.Attack(ModifyGemDamage(5m)).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
         await BlockCmd.Gain(5m).FromCard(this).Execute(choiceContext);
         await ApplyGemWetIfAny();
+    }
+
+    protected override void OnUpgrade()
+    {
+        _gemPowerId = SapphireGemPower.Id;
     }
 }

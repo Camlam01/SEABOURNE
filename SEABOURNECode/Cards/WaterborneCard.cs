@@ -8,12 +8,22 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class WaterborneCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
-    public WaterborneCard() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.None) { }
+
+    private int _waterwallAmount = 8;
+
+    public WaterborneCard() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
         await SeabornePowerTools.ApplyPowerToPlayer(WetCardPower.Id, ModifyGemStacks(1));
-        await SeaborneCardTools.GainWaterwall(ModifyGemStacks(IsSeaborneUpgraded ? 12 : 8));
+        await SeaborneCardTools.GainWaterwall(ModifyGemStacks(_waterwallAmount));
+    }
+
+    protected override void OnUpgrade()
+    {
+        _waterwallAmount = 12;
     }
 }

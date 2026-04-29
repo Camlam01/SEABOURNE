@@ -7,16 +7,26 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class AncientCurseCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
-    public AncientCurseCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies) { }
+
+    private int _stackAmount = 1;
+
+    public AncientCurseCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        int stacks = IsSeaborneUpgraded ? 2 : 1;
+
         foreach (var enemy in SeaborneCardTools.GetEnemyCreatures())
         {
-            await SeaborneCardTools.ApplyVulnerable(enemy, ModifyGemStacks(stacks));
-            await SeaborneCardTools.ApplyWeak(enemy, ModifyGemStacks(stacks));
+            await SeaborneCardTools.ApplyVulnerable(enemy, ModifyGemStacks(_stackAmount));
+            await SeaborneCardTools.ApplyWeak(enemy, ModifyGemStacks(_stackAmount));
         }
+    }
+
+    protected override void OnUpgrade()
+    {
+        _stackAmount = 2;
     }
 }

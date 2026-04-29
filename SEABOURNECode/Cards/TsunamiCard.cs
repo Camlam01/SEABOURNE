@@ -9,13 +9,22 @@ public sealed class TsunamiCard : SeaborneCard
 {
     public override bool HasAttackDamage => true;
     public override bool HasBuffOrDebuffStacks => true;
-    public TsunamiCard() : base(3, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+
+    private int _amount = 20;
+
+    public TsunamiCard() : base(3, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        int amount = IsSeaborneUpgraded ? 25 : 20;
-        await DamageCmd.Attack(ModifyGemDamage(amount)).FromCard(this).Targeting(cardPlay.Target!).Execute(choiceContext);
-        await SeaborneCardTools.GainWaterwall(ModifyGemStacks(amount));
+        await DamageCmd.Attack(ModifyGemDamage(_amount)).FromCard(this).Targeting(cardPlay.Target!).Execute(choiceContext);
+        await SeaborneCardTools.GainWaterwall(ModifyGemStacks(_amount));
+    }
+
+    protected override void OnUpgrade()
+    {
+        _amount = 25;
     }
 }

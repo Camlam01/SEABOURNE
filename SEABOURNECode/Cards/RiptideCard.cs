@@ -7,13 +7,24 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 
 public sealed class RiptideCard : SeaborneCard
 {
-    public RiptideCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.None) { }
+    private int _blockPerCard = 2;
+
+    public RiptideCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
+
         object? player = SeaborneReflectionTools.GetPlayer();
         int handSize = (SeaborneReflectionTools.GetMemberValue(player!, "Hand") as System.Collections.ICollection)?.Count ?? 0;
-        await BlockCmd.Gain(handSize * (IsSeaborneUpgraded ? 3 : 2)).FromCard(this).Execute(choiceContext);
+
+        await BlockCmd.Gain(handSize * _blockPerCard).FromCard(this).Execute(choiceContext);
+    }
+
+    protected override void OnUpgrade()
+    {
+        _blockPerCard = 3;
     }
 }

@@ -9,14 +9,24 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class PullThroughCard : SeaborneCard
 {
     public override bool HasCastOrReel => true;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => BlockVar(10m);
 
-    public PullThroughCard() : base(2, CardType.Skill, CardRarity.Common, TargetType.None) { }
+    private int _reelAmount = 3;
+
+    public PullThroughCard() : base(2, CardType.Skill, CardRarity.Common, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await SeaborneDiscardTools.Reel(ModifyGemReel(IsSeaborneUpgraded ? 4 : 3));
+        await SeaborneDiscardTools.Reel(ModifyGemReel(_reelAmount));
         await BlockCmd.Gain(DynamicVars.Block.BaseValue).FromCard(this).Execute(choiceContext);
+    }
+
+    protected override void OnUpgrade()
+    {
+        _reelAmount = 4;
     }
 }

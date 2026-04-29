@@ -8,15 +8,26 @@ public sealed class EntangleCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
     public override bool HasCastOrReel => true;
-    public EntangleCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.AllEnemies) { }
+
+    private int _weakAmount = 1;
+
+    public EntangleCard() : base(1, CardType.Skill, CardRarity.Common, TargetType.AllEnemies)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
         await SeaborneDiscardTools.AddCast(ModifyGemCast(2));
+
         foreach (var enemy in SeaborneCardTools.GetEnemyCreatures())
         {
-            await SeabornePowerTools.ApplyPowerToTarget(enemy, "Weak", IsSeaborneUpgraded ? 2 : 1);
+            await SeabornePowerTools.ApplyPowerToTarget(enemy, "Weak", ModifyGemStacks(_weakAmount));
         }
+    }
+
+    protected override void OnUpgrade()
+    {
+        _weakAmount = 2;
     }
 }

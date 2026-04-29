@@ -1,7 +1,7 @@
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using SEABOURNE.SEABOURNECode.Utils;
 using SEABOURNE.SEABOURNECode.Systems;
+using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
@@ -9,7 +9,10 @@ public sealed class InvigorateCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
     public override bool HasCastOrReel => true;
-    public InvigorateCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.None) { }
+
+    public InvigorateCard() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -20,6 +23,6 @@ public sealed class InvigorateCard : SeaborneCard
 
     protected override void OnUpgrade()
     {
-        SeaborneCost = 0;
+        SetBaseCost(0);
     }
 }

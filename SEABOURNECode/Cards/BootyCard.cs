@@ -10,14 +10,25 @@ public sealed class BootyCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
 
-    public BootyCard() : base(3, CardType.Skill, CardRarity.Rare, TargetType.None) { }
+    private decimal _blockAmount = 15m;
+    private string _gemPowerId = AmberGemPower.Id;
+
+    public BootyCard() : base(3, CardType.Skill, CardRarity.Rare, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await BlockCmd.Gain(IsSeaborneUpgraded ? 20m : 15m).FromCard(this).Execute(choiceContext);
+        await BlockCmd.Gain(_blockAmount).FromCard(this).Execute(choiceContext);
         await SeaborneCardTools.GainGemSlot(ModifyGemStacks(1));
-        await SeaborneCardTools.AcquireGem(IsSeaborneUpgraded ? OpalGemPower.Id : AmberGemPower.Id);
+        await SeaborneCardTools.AcquireGem(_gemPowerId);
         await ApplyGemWetIfAny();
+    }
+
+    protected override void OnUpgrade()
+    {
+        _blockAmount = 20m;
+        _gemPowerId = OpalGemPower.Id;
     }
 }

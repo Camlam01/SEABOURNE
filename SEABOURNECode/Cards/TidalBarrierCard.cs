@@ -7,15 +7,25 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class TidalBarrierCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
-    public TidalBarrierCard() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.None) { }
+
+    private int _waves = 3;
+
+    public TidalBarrierCard() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        int waves = IsSeaborneUpgraded ? 4 : 3;
-        for (int index = 0; index < waves; index++)
+
+        for (int index = 0; index < _waves; index++)
         {
             await SeaborneCardTools.GainWaterwall(ModifyGemStacks(4));
         }
+    }
+
+    protected override void OnUpgrade()
+    {
+        _waves = 4;
     }
 }

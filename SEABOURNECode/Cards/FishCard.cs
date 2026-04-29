@@ -7,11 +7,21 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 public sealed class FishCard : SeaborneCard
 {
     public override bool HasCastOrReel => true;
-    public FishCard() : base(0, CardType.Skill, CardRarity.Basic, TargetType.None) { }
+
+    private int _reelAmount = 1;
+
+    public FishCard() : base(0, CardType.Skill, CardRarity.Basic, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await SeaborneDiscardTools.Reel(ModifyGemReel(IsSeaborneUpgraded ? 2 : 1));
+        await SeaborneDiscardTools.Reel(ModifyGemReel(_reelAmount));
+    }
+
+    protected override void OnUpgrade()
+    {
+        _reelAmount = 2;
     }
 }

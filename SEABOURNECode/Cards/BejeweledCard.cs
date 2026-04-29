@@ -9,7 +9,9 @@ public sealed class BejeweledCard : SeaborneCard
 {
     public override bool HasBuffOrDebuffStacks => true;
 
-    public BejeweledCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.None) { }
+    public BejeweledCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -25,6 +27,6 @@ public sealed class BejeweledCard : SeaborneCard
 
     protected override void OnUpgrade()
     {
-        SeaborneCost = 0;
+        SetBaseCost(0);
     }
 }

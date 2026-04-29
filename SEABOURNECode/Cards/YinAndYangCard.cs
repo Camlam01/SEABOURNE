@@ -11,12 +11,16 @@ public sealed class YinAndYangCard : SeaborneCard
     public override bool HasAttackDamage => true;
     public override bool HasBuffOrDebuffStacks => true;
 
-    public YinAndYangCard() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies) { }
+    private string _gemPowerId = DiamondGemPower.Id;
+
+    public YinAndYangCard() : base(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await SeaborneCardTools.AcquireGem(IsSeaborneUpgraded ? OpalGemPower.Id : DiamondGemPower.Id);
+        await SeaborneCardTools.AcquireGem(_gemPowerId);
 
         foreach (var enemy in SeaborneCardTools.GetEnemyCreatures())
         {
@@ -25,5 +29,10 @@ public sealed class YinAndYangCard : SeaborneCard
         }
 
         await ApplyGemWetIfAny();
+    }
+
+    protected override void OnUpgrade()
+    {
+        _gemPowerId = OpalGemPower.Id;
     }
 }

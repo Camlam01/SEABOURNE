@@ -6,12 +6,21 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 
 public sealed class SeaShieldCard : SeaborneCard
 {
-    public SeaShieldCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.None) { }
+    private int _blockAmount = 12;
+
+    public SeaShieldCard() : base(1, CardType.Skill, CardRarity.Rare, TargetType.None)
+    {
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await ApplySeaborneGemModifiers();
-        await BlockCmd.Gain(IsSeaborneUpgraded ? 15 : 12).FromCard(this).Execute(choiceContext);
+        await BlockCmd.Gain(_blockAmount).FromCard(this).Execute(choiceContext);
+    }
+
+    protected override void OnUpgrade()
+    {
+        _blockAmount = 15;
     }
 
     private Task OnReeled()
