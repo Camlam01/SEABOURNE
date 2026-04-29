@@ -1,12 +1,11 @@
+using System.Reflection;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
-using System.Reflection;
 using SEABOURNE.SEABOURNECode.Character;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
@@ -14,31 +13,9 @@ namespace SEABOURNE.SEABOURNECode.Cards;
 [Pool(typeof(SEABOURNECardPool))]
 public abstract class SeaborneCard : CustomCardModel
 {
-    private static readonly string[] BaseCostMemberNames =
-    [
-        "BaseCost",
-        "CardBaseCost",
-        "DefaultCost",
-        "PrintedCost"
-    ];
-
-    private static readonly string[] CurrentCostMemberNames =
-    [
-        "Cost",
-        "CurrentCost",
-        "CostForTurn",
-        "TurnCost",
-        "DisplayedCost",
-        "ModifiedCost",
-        "EnergyCost"
-    ];
-
-    private static readonly string[] CostFlagNames =
-    [
-        "IsCostModified",
-        "CostModified",
-        "HasModifiedCost"
-    ];
+    private static readonly string[] BaseCostMemberNames = ["BaseCost", "CardBaseCost", "DefaultCost", "PrintedCost"];
+    private static readonly string[] CurrentCostMemberNames = ["Cost", "CurrentCost", "CostForTurn", "TurnCost", "DisplayedCost", "ModifiedCost", "EnergyCost"];
+    private static readonly string[] CostFlagNames = ["IsCostModified", "CostModified", "HasModifiedCost"];
 
     private int _baseSeaborneCost;
     private int _currentSeaborneCost;
@@ -180,7 +157,6 @@ public abstract class SeaborneCard : CustomCardModel
         }
 
         bool costIsModified = _currentSeaborneCost != _baseSeaborneCost;
-
         foreach (string memberName in CostFlagNames)
         {
             TrySetBooleanMember(memberName, costIsModified);
@@ -318,14 +294,13 @@ public abstract class SeaborneCard : CustomCardModel
     private bool GetUpgradeState()
     {
         object self = this;
-
         foreach (string name in new[] { "IsUpgraded", "UpgradedCount", "UpgradeCount", "TimesUpgraded" })
         {
-            PropertyInfo? property = self.GetType().BaseType?.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
+            PropertyInfo? property =
+                self.GetType().BaseType?.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 ?? self.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
             object? value = property?.GetValue(self);
-
             if (value is bool flag)
             {
                 return flag;
