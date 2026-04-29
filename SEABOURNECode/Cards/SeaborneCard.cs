@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 using System.Reflection;
 using SEABOURNE.SEABOURNECode.Character;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Systems;
+using SEABOURNE.SEABOURNECode.Utils;
 using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;

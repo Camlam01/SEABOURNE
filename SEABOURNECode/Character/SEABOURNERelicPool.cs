@@ -1,14 +1,12 @@
-﻿using BaseLib.Abstracts;
+using BaseLib.Abstracts;
 using Godot;
 using SEABOURNE.SEABOURNECode.Extensions;
 
-namespace SEABOURNE.SEABOURNECode.Character
-{
-    public class SEABOURNERelicPool : CustomRelicPoolModel
-    {
-        public override Color LabOutlineColor => SEABOURNE.Color;
+namespace SEABOURNE.SEABOURNECode.Character;
 
-        public override string BigEnergyIconPath => "charui/big_energy.png".ImagePath();
-        public override string TextEnergyIconPath => "charui/text_energy.png".ImagePath();
-    }
+public sealed class SEABOURNERelicPool : CustomRelicPoolModel
+{
+    public override Color LabOutlineColor => TheSeaborne.Color;
+    public override string BigEnergyIconPath => "charui/big_energy.png".ImagePath();
+    public override string TextEnergyIconPath => "charui/text_energy.png".ImagePath();
 }
