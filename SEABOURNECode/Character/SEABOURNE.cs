@@ -51,16 +51,39 @@ public sealed class TheSeaborne : CustomCharacterModel
         "vfx/vfx_bloody_impact",
     ];
 
-    public override string CustomVisualPath => "res://SEABOURNE/Characters/SEABOURNE/seaborne_character.tscn";
-    public override string CustomTrailPath => "res://scenes/vfx/card_trail_ironclad.tscn";
-    public override string CustomIconPath => "res://SEABOURNE/Characters/SEABOURNE/seaborne_character_icon.tscn";
-    public override string CustomIconTexturePath => "res://SEABOURNE/images/seaborne_placeholder.png";
-    public override string CustomRestSiteAnimPath => "res://SEABOURNE/Characters/SEABOURNE/seaborne_character_rest_site.tscn";
-    public override string CustomMerchantAnimPath => "res://SEABOURNE/Characters/SEABOURNE/seaborne_character_merchant.tscn";
-    public override string CustomCharacterSelectBg => "res://SEABOURNE/Characters/SEABOURNE/char_select_bg_seaborne_character.tscn";
-    public override string CustomCharacterSelectIconPath => "res://SEABOURNE/images/seaborne_placeholder.png";
-    public override string CustomCharacterSelectLockedIconPath => "res://SEABOURNE/images/seaborne_placeholder.png";
-    public override string CustomCharacterSelectTransitionPath => "res://materials/transitions/ironclad_transition_mat.tres";
-    public override string CustomMapMarkerPath => "res://SEABOURNE/images/seaborne_placeholder.png";
-    public override string? CustomEnergyCounterPath => "res://scenes/combat/energy_counters/ironclad_energy_counter.tscn";
+    public override string CustomVisualPath =>
+        "res://SEABOURNE/Characters/SEABOURNE/seaborne_character.tscn";
+
+    public override string CustomTrailPath =>
+        "res://scenes/vfx/card_trail_ironclad.tscn";
+
+    public override string CustomIconPath =>
+        "res://SEABOURNE/Characters/SEABOURNE/seaborne_character_icon.tscn";
+
+    public override string CustomIconTexturePath =>
+        "res://SEABOURNE/images/seaborne_placeholder.png";
+
+    public override string CustomRestSiteAnimPath =>
+        "res://SEABOURNE/Characters/SEABOURNE/seaborne_character_rest_site.tscn";
+
+    public override string CustomMerchantAnimPath =>
+        "res://SEABOURNE/Characters/SEABOURNE/seaborne_character_merchant.tscn";
+
+    public override string CustomCharacterSelectBg =>
+        "res://SEABOURNE/Characters/SEABOURNE/char_select_bg_seaborne_character.tscn";
+
+    public override string CustomCharacterSelectIconPath =>
+        "res://SEABOURNE/images/seaborne_placeholder.png";
+
+    public override string CustomCharacterSelectLockedIconPath =>
+        "res://SEABOURNE/images/seaborne_placeholder.png";
+
+    public override string CustomCharacterSelectTransitionPath =>
+        "res://materials/transitions/ironclad_transition_mat.tres";
+
+    public override string CustomMapMarkerPath =>
+        "res://SEABOURNE/images/seaborne_placeholder.png";
+
+    public override string? CustomEnergyCounterPath =>
+        "res://scenes/combat/energy_counters/ironclad_energy_counter.tscn";
 }
