@@ -14,9 +14,10 @@ public class EntrancingMelodyCard() : SeaborneCard(2, CardType.Skill, CardRarity
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        for (var i = 0
-        i < times;
-        i++) await Apply(play, new TrancePower(), 3);
+        for (var i = 0; i < times; i++)
+        {
+            await Apply(play, new TrancePower(), 3);
+        }
     }
 
     protected override void OnUpgrade()

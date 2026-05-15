@@ -14,9 +14,10 @@ public class TidalBarrierCard() : SeaborneCard(2, CardType.Skill, CardRarity.Unc
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        for (var i = 0
-        i < times;
-        i++) await Gain(play, new WaterwallPower(), 4);
+        for (var i = 0; i < times; i++)
+        {
+            await Gain(play, new WaterwallPower(), 4);
+        }
     }
 
     protected override void OnUpgrade()

@@ -14,9 +14,10 @@ public class LuckOfTheSeaCard() : SeaborneCard(1, CardType.Skill, CardRarity.Unc
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        for (var i = 0
-        i < choices;
-        i++) await SeaborneCardRuntime.GainRandomGem(play);
+        for (var i = 0; i < choices; i++)
+        {
+            await SeaborneCardRuntime.GainRandomGem(play);
+        }
         await Gain(play, new WetCardPower(), 1);
     }
 

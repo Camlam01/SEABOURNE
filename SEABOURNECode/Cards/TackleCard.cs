@@ -16,9 +16,10 @@ public class TackleCard() : SeaborneCard(0, CardType.Attack, CardRarity.Common, 
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        for (var i = 0
-        i < hits;
-        i++) await Deal(play, Damage);
+        for (var i = 0; i < hits; i++)
+        {
+            await Deal(play, Damage);
+        }
     }
 
     protected override void OnUpgrade()
