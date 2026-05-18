@@ -1,18 +1,16 @@
-using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Powers;
 
-namespace SEABOURNE.SEABOURNECode.Powers;
-
-public sealed class GildedPower : CustomPowerModel
+namespace SEABOURNE.SEABOURNECode.Powers
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
-
-    public const string Id = "Seaborne:Gilded";
-    public string Name => "Gilded";
-    public string Description => "The first time each turn you have 10 cards in hand, gain Energy.";
-
-    public override string? CustomPackedIconPath => "res://SEABOURNE/images/gem_placeholder.png";
-    public override string? CustomBigIconPath => CustomPackedIconPath;
-    public override string? CustomBigBetaIconPath => CustomPackedIconPath;
+    /// <summary>
+    /// Gilded power grants energy when the player's hand reaches a certain
+    /// size for the first time each turn.  This minimal implementation
+    /// declares the power metadata; behaviour should be implemented in
+    /// runtime hooks.
+    /// </summary>
+    public sealed class GildedPower : SEABOURNEPower
+    {
+        public override PowerType Type => PowerType.Buff;
+        public override PowerStackType StackType => PowerStackType.Counter;
+    }
 }

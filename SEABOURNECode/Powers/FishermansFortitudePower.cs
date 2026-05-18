@@ -1,18 +1,15 @@
-using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Powers;
 
-namespace SEABOURNE.SEABOURNECode.Powers;
-
-public sealed class FishermansFortitudePower : CustomPowerModel
+namespace SEABOURNE.SEABOURNECode.Powers
 {
-    public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Counter;
-
-    public const string Id = "Seaborne:FishermansFortitude";
-    public string Name => "Fisherman's Fortitude";
-    public string Description => "Gain Block whenever you Reel.";
-
-    public override string? CustomPackedIconPath => "res://SEABOURNE/images/cast_placeholder.png";
-    public override string? CustomBigIconPath => CustomPackedIconPath;
-    public override string? CustomBigBetaIconPath => CustomPackedIconPath;
+    /// <summary>
+    /// Fisherman's Fortitude grants the player block whenever they gain Cast.
+    /// This minimal stub defines the power metadata.  Hook logic should be
+    /// implemented elsewhere in the runtime.
+    /// </summary>
+    public sealed class FishermansFortitudePower : SEABOURNEPower
+    {
+        public override PowerType Type => PowerType.Buff;
+        public override PowerStackType StackType => PowerStackType.Counter;
+    }
 }
