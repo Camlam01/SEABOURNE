@@ -1,40 +1,30 @@
-using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.ValueProps;
-using SEABOURNE.SEABOURNECode.Utils;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using SEABOURNE.SEABOURNECode.Extensions;
 
 namespace SEABOURNE.SEABOURNECode.Powers;
 
 public sealed class GildedPower : SEABOURNEPower
 {
     public override PowerType Type => PowerType.Buff;
-
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    private sealed class Data { public bool TriggeredThisTurn; }
-
-    protected override object InitInternalData()
+    private Task TryTrigger()
     {
-        return new Data();
+        if (OwnerRef is null)
+            return Task.CompletedTask;
+
+        var turn = SeabourneState.Turn(OwnerRef);
+        if (turn.GildedTriggered || HandCount() < 10)
+            return Task.CompletedTask;
+
+        turn.GildedTriggered = true;
+        GainEnergy(Amount);
+        return Task.CompletedTask;
     }
 
-    public int RequiredHandSize => 10;
-
-    public int EnergyToGain => Amount;
-
-    public bool CanTrigger(int handSize)
-    {
-        return handSize >= RequiredHandSize && !GetInternalData<Data>().TriggeredThisTurn;
-    }
-
-    public void MarkTriggered()
-    {
-        GetInternalData<Data>().TriggeredThisTurn = true;
-    }
-
-    public void ResetTurn()
-    {
-        GetInternalData<Data>().TriggeredThisTurn = false;
-    }
+    public override Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw) => TryTrigger();
+    public override Task AfterCardRetained(CardModel card) => TryTrigger();
+    public override Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay) => TryTrigger();
 }

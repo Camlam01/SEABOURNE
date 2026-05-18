@@ -1,24 +1,30 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class RiptideCard() : SeaborneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public sealed class RiptideCard : SeabourneCard
 {
-    private int blockPerCard = 2;
+    public RiptideCard() : base(1, CardType.Skill, CardRarity.Uncommon, SelfTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    private int _perCard = 2;
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await GainBlock(play, blockPerCard * SeaborneCardRuntime.CardsInHand(play));
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        var owner = SeabourneReflection.GetOwner(play);
+        var handCount = owner is null ? 0 : SeabourneReflection.GetHand(owner)?.Count ?? 0;
+        await Block(choiceContext, play, handCount * _perCard);
     }
 
     protected override void OnUpgrade()
     {
-        blockPerCard = 3;
+        _perCard = 3;
     }
 }

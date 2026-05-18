@@ -1,25 +1,29 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class EmpowerCard() : SeaborneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Enemy)
+public sealed class EmpowerCard : SeabourneCard
 {
-    private int trance = 5;
+    public EmpowerCard() : base(2, CardType.Skill, CardRarity.Uncommon, AnyEnemyTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    private int _trance = 5;
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Apply(play, new TrancePower(), trance);
-        await Apply(play, new StrengthPower(), 3);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await ApplyTarget<TrancePower>(choiceContext, play, _trance);
+        await ApplyTarget<StrengthPower>(choiceContext, play, 3);
     }
 
     protected override void OnUpgrade()
     {
-        trance = 6;
+        _trance = 6;
     }
 }

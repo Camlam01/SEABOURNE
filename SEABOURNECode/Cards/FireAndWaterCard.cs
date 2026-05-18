@@ -1,28 +1,30 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class FireAndWaterCard() : SeaborneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.Enemy)
+public sealed class FireAndWaterCard : SeabourneCard
 {
-    protected override HashSet<CardTag> CanonicalTags => [CardTag.Innate];
+    public FireAndWaterCard() : base(1, CardType.Attack, CardRarity.Uncommon, AnyEnemyTarget)
+    {
+    }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Attack), new BlockVar(5m, ValueProp.Block)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(5m), BlockVar(5m) ];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => KeywordList(CardKeyword.Innate);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Deal(play, Damage);
-        await GainBlock(play, Block);
-        await Acquire(play, Random.Shared.Next(2) == 0 ? new RubyGemPower() : new SapphireGemPower());
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Attack(choiceContext, play, PrimaryDamage);
+        await Block(choiceContext, play, PrimaryBlock);
+        if (!Acquire(play, SeabourneGemType.Ruby)) Acquire(play, SeabourneGemType.Sapphire);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
+
     }
 }

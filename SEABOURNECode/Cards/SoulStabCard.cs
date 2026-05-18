@@ -1,22 +1,24 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class SoulStabCard() : SeaborneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.Enemy)
+public sealed class SoulStabCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Attack)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(5m) ];
+    public SoulStabCard() : base(0, CardType.Attack, CardRarity.Uncommon, AnyEnemyTarget)
+    {
+        AddImbued(1);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Deal(play, Damage);
-        await Apply(play, new VulnerablePower(), 1);
-        await Gain(play, new ImbuedPower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Attack(choiceContext, play, PrimaryDamage);
+        await ApplyTarget<VulnerablePower>(choiceContext, play, 1);
     }
 
     protected override void OnUpgrade()

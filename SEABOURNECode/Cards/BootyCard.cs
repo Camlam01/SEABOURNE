@@ -1,22 +1,25 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class BootyCard() : SeaborneCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
+public sealed class BootyCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(15m, ValueProp.Block)];
+    public BootyCard() : base(3, CardType.Skill, CardRarity.Rare, SelfTarget)
+    {
+    }
 
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ BlockVar(15m) ];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await GainBlock(play, Block);
-        await Gain(play, new GemSlotPower(), 1);
-        await Acquire(play, Random.Shared.Next(2) == 0 ? new AmberGemPower() : new OpalGemPower());
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Block(choiceContext, play, PrimaryBlock);
+        var owner = SeabourneReflection.GetOwner(play);
+        if (owner is not null) SeabourneState.Gems(owner).SlotCount += 1;
+        if (!Acquire(play, SeabourneGemType.Amber)) Acquire(play, SeabourneGemType.Opal);
     }
 
     protected override void OnUpgrade()

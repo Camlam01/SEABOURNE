@@ -1,28 +1,30 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class FlubCard() : SeaborneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+public sealed class FlubCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(7m, ValueProp.Block)];
+    public FlubCard() : base(1, CardType.Skill, CardRarity.Common, SelfTarget)
+    {
+    }
 
-    private int castAmount = 2;
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ BlockVar(7m) ];
+    private int _castAmount = 2;
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Cast(play, castAmount);
-        await GainBlock(play, Block);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Cast(choiceContext, play, _castAmount);
+        await Block(choiceContext, play, PrimaryBlock);
     }
 
     protected override void OnUpgrade()
     {
-        castAmount = 3;
+        _castAmount = 3;
         UpgradeBlock(1m);
     }
 }

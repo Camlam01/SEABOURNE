@@ -1,34 +1,29 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class HarpoonCard() : SeaborneCard(2, CardType.Attack, CardRarity.Rare, TargetType.Enemy), ISeaborneWetCard
+public sealed class HarpoonCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(15m, ValueProp.Attack)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(15m) ];
+    public HarpoonCard() : base(2, CardType.Attack, CardRarity.Rare, AnyEnemyTarget)
+    {
+        AddWet(1);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Deal(play, Damage);
-        await Cast(play, 6);
-        await Reel(play);
-        await Gain(play, new WetCardPower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Attack(choiceContext, play, PrimaryDamage);
+        await Cast(choiceContext, play, 6);
+        await Reel(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
-    }
 
-    public async Task OnReeled(CardPlay play)
-    {
-        await Deal(play, Damage);
-        await Cast(play, 6);
-        await Reel(play);
     }
 }

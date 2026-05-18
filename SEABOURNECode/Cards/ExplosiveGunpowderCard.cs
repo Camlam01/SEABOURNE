@@ -1,22 +1,26 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class ExplosiveGunpowderCard() : SeaborneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public sealed class ExplosiveGunpowderCard : SeabourneCard
 {
+    public ExplosiveGunpowderCard() : base(1, CardType.Power, CardRarity.Uncommon, SelfTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Gain(play, new ExplosiveGunpowderPower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await ApplySelf<ExplosiveGunpowderPower>(choiceContext, play, 1);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
+
     }
 }

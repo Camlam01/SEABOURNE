@@ -1,20 +1,22 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class StrikeCard() : SeaborneCard(1, CardType.Attack, CardRarity.Basic, TargetType.Enemy)
+public sealed class StrikeCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Attack)];
+    public StrikeCard() : base(1, CardType.Attack, CardRarity.Basic, AnyEnemyTarget)
+    {
+    }
 
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(6m) ];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Deal(play, Damage);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Attack(choiceContext, play, PrimaryDamage);
     }
 
     protected override void OnUpgrade()

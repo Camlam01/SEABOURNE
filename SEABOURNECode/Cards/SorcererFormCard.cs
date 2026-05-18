@@ -1,25 +1,28 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class SorcererFormCard() : SeaborneCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
+public sealed class SorcererFormCard : SeabourneCard
 {
-    protected override HashSet<CardTag> CanonicalTags => [CardTag.Ethereal];
+    public SorcererFormCard() : base(3, CardType.Power, CardRarity.Rare, SelfTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => KeywordList(CardKeyword.Ethereal);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await SeaborneCardRuntime.GiveAllCardsImbued(play, 1);
-        await Gain(play, new SorcererFormPower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await ApplySelf<SorcererFormPower>(choiceContext, play, 1);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
+
     }
 }

@@ -1,28 +1,30 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class YinAndYangCard() : SeaborneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public sealed class YinAndYangCard : SeabourneCard
 {
-    protected override HashSet<CardTag> CanonicalTags => [CardTag.Innate];
+    public YinAndYangCard() : base(2, CardType.Attack, CardRarity.Uncommon, AllEnemiesTarget)
+    {
+    }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8m, ValueProp.Attack)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(8m) ];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => KeywordList(CardKeyword.Innate);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await DealAll(play, Damage);
-        await ApplyAll(play, new WeakPower(), 1);
-        await Acquire(play, Random.Shared.Next(2) == 0 ? new DiamondGemPower() : new OpalGemPower());
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await AttackAll(choiceContext, play, PrimaryDamage);
+        await ApplyAll<WeakPower>(choiceContext, play, 1);
+        if (!Acquire(play, SeabourneGemType.Diamond)) Acquire(play, SeabourneGemType.Opal);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
+
     }
 }

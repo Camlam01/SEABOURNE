@@ -1,22 +1,26 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class CannonVolleyCard() : SeaborneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.Enemy)
+public sealed class CannonVolleyCard : SeabourneCard
 {
+    public CannonVolleyCard() : base(2, CardType.Attack, CardRarity.Uncommon, AnyEnemyTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await FireCannon(play, 20m, targetOnly: true);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await FireCannon(choiceContext, play);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
+
     }
 }

@@ -1,22 +1,25 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class BejeweledStrikeCard() : SeaborneCard(1, CardType.Attack, CardRarity.Rare, TargetType.Enemy)
+public sealed class BejeweledStrikeCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Attack)];
+    public BejeweledStrikeCard() : base(1, CardType.Attack, CardRarity.Rare, AnyEnemyTarget)
+    {
+    }
 
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(10m) ];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Deal(play, Damage);
-        await Gain(play, new GemSlotPower(), 1);
-        await Acquire(play, Random.Shared.Next(3) switch { 0 => new RubyGemPower(), 1 => new SapphireGemPower(), _ => new EmeraldGemPower() });
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Attack(choiceContext, play, PrimaryDamage);
+        var owner = SeabourneReflection.GetOwner(play);
+        if (owner is not null) SeabourneState.Gems(owner).SlotCount += 1;
+        if (!Acquire(play, SeabourneGemType.Ruby) && !Acquire(play, SeabourneGemType.Sapphire)) Acquire(play, SeabourneGemType.Emerald);
     }
 
     protected override void OnUpgrade()

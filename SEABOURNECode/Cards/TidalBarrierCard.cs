@@ -1,27 +1,29 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class TidalBarrierCard() : SeaborneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public sealed class TidalBarrierCard : SeabourneCard
 {
-    private int times = 3;
+    public TidalBarrierCard() : base(2, CardType.Skill, CardRarity.Uncommon, SelfTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    private int _amount = 4;
+    private int _times = 3;
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        for (var i = 0; i < times; i++)
-        {
-            await Gain(play, new WaterwallPower(), 4);
-        }
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        for (var i = 0; i < _times; i++) await ApplySelf<WaterwallPower>(choiceContext, play, _amount);
     }
 
     protected override void OnUpgrade()
     {
-        times = 4;
+        _times = 4;
     }
 }

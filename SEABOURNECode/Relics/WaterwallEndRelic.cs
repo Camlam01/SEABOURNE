@@ -1,9 +1,10 @@
-
-using SEABOURNE.SEABOURNECode.Powers;
+using MegaCrit.Sts2.Core.Entities.Relics;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using SEABOURNE.SEABOURNECode.Extensions;
 
 namespace SEABOURNE.SEABOURNECode.Relics;
 
-public class WaterwallEndRelic : SeaborneRelic
+public sealed class WaterwallEndRelic : SeabourneRelic
 {
-    public override void OnTurnEnd() { Owner.ApplyPower(new WaterwallPower(), 5); }
+    public override RelicRarity Rarity => RelicRarity.Rare;
 }

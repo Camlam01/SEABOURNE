@@ -1,30 +1,27 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
-using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
+using SEABOURNE.SEABOURNECode.Extensions;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class TentacleSlamCard() : SeaborneCard(3, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies), ISeaborneWetCard
+public sealed class TentacleSlamCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(15m, ValueProp.Attack)];
+    public TentacleSlamCard() : base(3, CardType.Attack, CardRarity.Uncommon, AllEnemiesTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(15m) ];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await DealAll(play, Damage);
-        await Gain(play, new WetCardPower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        AddWet(1);
+        await AttackAll(choiceContext, play, PrimaryDamage);
     }
 
     protected override void OnUpgrade()
     {
         UpgradeDamage(5m);
-    }
-
-    public async Task OnReeled(CardPlay play)
-    {
-        await DealAll(play, Damage);
     }
 }

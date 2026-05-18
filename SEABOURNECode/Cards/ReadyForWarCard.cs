@@ -1,25 +1,29 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class ReadyForWarCard() : SeaborneCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public sealed class ReadyForWarCard : SeabourneCard
 {
-    private int count = 1;
+    public ReadyForWarCard() : base(0, CardType.Skill, CardRarity.Uncommon, SelfTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    private int _count = 1;
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Cast(play, 3);
-        await AddSpinyCannonballs(play, count);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Cast(choiceContext, play, 3);
+        await AddCardCopiesToHand<SpinyCannonballCard>(choiceContext, play, _count);
     }
 
     protected override void OnUpgrade()
     {
-        count = 2;
+        _count = 2;
     }
 }

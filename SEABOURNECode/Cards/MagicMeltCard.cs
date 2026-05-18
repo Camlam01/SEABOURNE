@@ -1,28 +1,28 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class MagicMeltCard() : SeaborneCard(1, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
+public sealed class MagicMeltCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Attack), new BlockVar(5m, ValueProp.Block)];
-
-    private int imbued = 3;
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(5m), BlockVar(5m) ];
+    public MagicMeltCard() : base(1, CardType.Attack, CardRarity.Rare, AllEnemiesTarget)
+    {
+        AddImbued(3);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await DealAll(play, Damage);
-        await GainBlock(play, Block);
-        await Gain(play, new ImbuedPower(), imbued);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await AttackAll(choiceContext, play, PrimaryDamage);
+        await Block(choiceContext, play, PrimaryBlock);
     }
 
     protected override void OnUpgrade()
     {
-        imbued = 4;
+        AddImbued(1);
     }
 }

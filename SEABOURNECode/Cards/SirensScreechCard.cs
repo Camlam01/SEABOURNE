@@ -1,30 +1,29 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class SirensScreechCard() : SeaborneCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Enemy), ISeaborneWetCard
+public sealed class SirensScreechCard : SeabourneCard
 {
-    private int trance = 3;
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    private int _trance = 3;
+
+    public SirensScreechCard() : base(3, CardType.Skill, CardRarity.Uncommon, AllEnemiesTarget)
+    {
+        AddWet(1);
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Apply(play, new TrancePower(), trance);
-        await Gain(play, new WetCardPower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await ApplyAll<TrancePower>(choiceContext, play, _trance);
     }
 
     protected override void OnUpgrade()
     {
-        trance = 4;
-    }
-
-    public async Task OnReeled(CardPlay play)
-    {
-        await Apply(play, new TrancePower(), trance);
+        _trance = 4;
     }
 }

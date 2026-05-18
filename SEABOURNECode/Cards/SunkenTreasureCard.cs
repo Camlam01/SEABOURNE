@@ -1,25 +1,29 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class SunkenTreasureCard() : SeaborneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public sealed class SunkenTreasureCard : SeabourneCard
 {
-    protected override HashSet<CardTag> CanonicalTags => [CardTag.Innate];
+    public SunkenTreasureCard() : base(1, CardType.Skill, CardRarity.Uncommon, SelfTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => KeywordList(CardKeyword.Innate);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await SeaborneCardRuntime.GainAmberOrEmerald(play);
-        await Cast(play, 2);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        if (!Acquire(play, SeabourneGemType.Emerald)) Acquire(play, SeabourneGemType.Amber);
+        await Cast(choiceContext, play, 2);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
+
     }
 }

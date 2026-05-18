@@ -1,23 +1,27 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class DeterminedCard() : SeaborneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+public sealed class DeterminedCard : SeabourneCard
 {
+    public DeterminedCard() : base(1, CardType.Skill, CardRarity.Uncommon, AllEnemiesTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await ApplyAll(play, new StrengthPower(), 3);
-        await Gain(play, new SlipperyPower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await ApplyAll<StrengthPower>(choiceContext, play, 3);
+        await ApplySelf<SlipperyPower>(choiceContext, play, 1);
     }
 
     protected override void OnUpgrade()
     {
-        base.OnUpgrade();
+
     }
 }

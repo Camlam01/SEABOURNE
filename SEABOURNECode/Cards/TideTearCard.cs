@@ -1,28 +1,30 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class TideTearCard() : SeaborneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public sealed class TideTearCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Attack)];
+    public TideTearCard() : base(1, CardType.Attack, CardRarity.Uncommon, AllEnemiesTarget)
+    {
+    }
 
-    private int count = 3;
-
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(6m) ];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await DealAll(play, Damage);
-        await SeaborneCardRuntime.DiscardTopDraw(play, count);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await AttackAll(choiceContext, play, PrimaryDamage);
+        var owner = SeabourneReflection.GetOwner(play);
+        var draw = owner is null ? null : SeabourneReflection.GetDraw(owner);
+        var discard = owner is null ? null : SeabourneReflection.GetDiscard(owner);
+        if (draw is not null && discard is not null) { var count = Math.Min(draw.Count, 3); for (var i = 0; i < count; i++) { var idx = draw.Count - 1; var c = draw[idx]; draw.RemoveAt(idx); discard.Add(c); } }
     }
 
     protected override void OnUpgrade()
     {
         UpgradeDamage(2m);
-        count = 4;
     }
 }

@@ -1,21 +1,23 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class PullThroughCard() : SeaborneCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
+public sealed class PullThroughCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(11m, ValueProp.Block)];
+    public PullThroughCard() : base(2, CardType.Skill, CardRarity.Common, SelfTarget)
+    {
+    }
 
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ BlockVar(11m) ];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Reel(play);
-        await GainBlock(play, Block);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Reel(choiceContext, play);
+        await Block(choiceContext, play, PrimaryBlock);
     }
 
     protected override void OnUpgrade()

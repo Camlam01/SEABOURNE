@@ -1,18 +1,8 @@
-using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.ValueProps;
-using SEABOURNE.SEABOURNECode.Utils;
+using SEABOURNE.SEABOURNECode.Extensions;
 
 namespace SEABOURNE.SEABOURNECode.Powers;
 
-public sealed class AmberGemPower : SEABOURNEPower
+public sealed class AmberGemPower : SeabourneGemPower
 {
-    public override PowerType Type => PowerType.Buff;
-
-    public override PowerStackType StackType => PowerStackType.Counter;
-
-    public int CostReduction => 1;
-
-    public bool GrantsExhaust => true;
+    protected override SeabourneGemType GemType => SeabourneGemType.Amber;
 }

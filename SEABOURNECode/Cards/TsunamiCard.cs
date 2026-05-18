@@ -1,28 +1,30 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class TsunamiCard() : SeaborneCard(3, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+public sealed class TsunamiCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(20m, ValueProp.Attack)];
+    public TsunamiCard() : base(3, CardType.Attack, CardRarity.Uncommon, AnyEnemyTarget)
+    {
+    }
 
-    private int waterwall = 20;
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(20m) ];
+    private int _waterwall = 20;
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await DealAll(play, Damage);
-        await Gain(play, new WaterwallPower(), waterwall);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await Attack(choiceContext, play, PrimaryDamage);
+        await ApplySelf<WaterwallPower>(choiceContext, play, _waterwall);
     }
 
     protected override void OnUpgrade()
     {
         UpgradeDamage(5m);
-        waterwall = 25;
+        _waterwall = 25;
     }
 }

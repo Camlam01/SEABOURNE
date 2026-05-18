@@ -1,21 +1,24 @@
-using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.ValueProps;
+using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
-using SEABOURNE.SEABOURNECode.Utils;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
-public class SpinyCannonballCard() : SeaborneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.Enemy)
+public sealed class SpinyCannonballCard : SeabourneCard
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Attack)];
+    public SpinyCannonballCard() : base(0, CardType.Attack, CardRarity.Common, AnyEnemyTarget)
+    {
+    }
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [ DamageVar(5m) ];
+    public override IEnumerable<CardTag> Tags => CardTags("Load");
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
     {
-        await Deal(play, Damage);
-        await Apply(play, new VulnerablePower(), 1);
+        SeabourneState.ApplyCostAndWetMods(this, play);
+        await LoadCannon(choiceContext, play);
     }
 
     protected override void OnUpgrade()
