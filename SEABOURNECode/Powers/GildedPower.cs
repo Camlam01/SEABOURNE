@@ -1,30 +1,18 @@
-using MegaCrit.Sts2.Core.Entities.Cards;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using SEABOURNE.SEABOURNECode.Extensions;
 
 namespace SEABOURNE.SEABOURNECode.Powers;
 
-public sealed class GildedPower : SEABOURNEPower
+public sealed class GildedPower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    private Task TryTrigger()
-    {
-        if (OwnerRef is null)
-            return Task.CompletedTask;
+    public const string Id = "Seaborne:Gilded";
+    public string Name => "Gilded";
+    public string Description => "The first time each turn you have 10 cards in hand, gain Energy.";
 
-        var turn = SeabourneState.Turn(OwnerRef);
-        if (turn.GildedTriggered || HandCount() < 10)
-            return Task.CompletedTask;
-
-        turn.GildedTriggered = true;
-        GainEnergy(Amount);
-        return Task.CompletedTask;
-    }
-
-    public override Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw) => TryTrigger();
-    public override Task AfterCardRetained(CardModel card) => TryTrigger();
-    public override Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay) => TryTrigger();
+    public override string? CustomPackedIconPath => "res://SEABOURNE/images/gem_placeholder.png";
+    public override string? CustomBigIconPath => CustomPackedIconPath;
+    public override string? CustomBigBetaIconPath => CustomPackedIconPath;
 }

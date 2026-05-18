@@ -1,20 +1,18 @@
-using MegaCrit.Sts2.Core.Entities.Creatures;
+using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Powers;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models;
 
 namespace SEABOURNE.SEABOURNECode.Powers;
 
-public sealed class FishermansFortitudePower : SEABOURNEPower
+public sealed class FishermansFortitudePower : CustomPowerModel
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
-    public override async Task AfterPowerAmountChanged(PowerModel power, decimal amount, Creature? applier, CardModel? cardSource)
-    {
-        if (Owner is null || power.Owner != Owner || power is not CastPower || amount <= 0 || cardSource is null)
-            return;
+    public const string Id = "Seaborne:FishermansFortitude";
+    public string Name => "Fisherman's Fortitude";
+    public string Description => "Gain Block whenever you Reel.";
 
-        await GainBlockAsync(Amount);
-    }
+    public override string? CustomPackedIconPath => "res://SEABOURNE/images/cast_placeholder.png";
+    public override string? CustomBigIconPath => CustomPackedIconPath;
+    public override string? CustomBigBetaIconPath => CustomPackedIconPath;
 }

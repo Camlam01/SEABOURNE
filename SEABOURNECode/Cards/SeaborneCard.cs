@@ -1,164 +1,281 @@
 using BaseLib.Abstracts;
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
-using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using System.Reflection;
 using SEABOURNE.SEABOURNECode.Character;
-using SEABOURNE.SEABOURNECode.Extensions;
 using SEABOURNE.SEABOURNECode.Powers;
 
 namespace SEABOURNE.SEABOURNECode.Cards;
 
 [Pool(typeof(SEABOURNECardPool))]
-public abstract class SeabourneCard(int cost, CardType type, CardRarity rarity, TargetType target)
-    : CustomCardModel(cost, type, rarity, target)
+public abstract class SeabourneCard : CustomCardModel
 {
-    protected static TargetType AnyEnemyTarget => ParseTarget("AnyEnemy", "Enemy");
-    protected static TargetType AllEnemiesTarget => ParseTarget("AllEnemies", "AllEnemy");
-    protected static TargetType SelfTarget => ParseTarget("Self");
-    protected static TargetType NoneTarget => ParseTarget("None", "Self");
+    private static readonly string[] BaseCostMemberNames = ["BaseCost", "CardBaseCost", "DefaultCost", "PrintedCost"];
+    private static readonly string[] CurrentCostMemberNames = ["Cost", "CurrentCost", "CostForTurn", "TurnCost", "DisplayedCost", "ModifiedCost", "EnergyCost"];
+    private static readonly string[] CostFlagNames = ["IsCostModified", "CostModified", "HasModifiedCost"];
 
-    protected static ValueProp MoveProp => ParseValueProp("Move", "Damage", "Block");
+    private int _baseSeabourneCost;
+    private int _currentSeabourneCost;
 
-    protected static IReadOnlyList<CardTag> CardTags(params string[] names) =>
-        names.Select(TryParseTag).Where(t => t.HasValue).Select(t => t!.Value).ToList();
+    public virtual bool HasAttackDamage => false;
+    public virtual bool HasBuffOrDebuffStacks => false;
+    public virtual bool HasCastOrReel => false;
+    public virtual bool CanReceiveWet => true;
 
-    protected static IReadOnlyList<CardKeyword> KeywordList(params CardKeyword[] keywords) => keywords;
+    public decimal GemDamageMultiplier { get; set; } = 1m;
+    public int GemStackBonus { get; set; }
+    public int GemCostReduction { get; set; }
+    public int GemAddedCast { get; set; }
+    public int GemAddedReel { get; set; }
+    public int GemAddedWet { get; set; }
+    public bool GemShouldExhaust { get; set; }
 
-    public override string PortraitPath => "card.png".CardImagePath();
+    protected int SeabourneCost
+    {
+        get => _baseSeabourneCost;
+        set
+        {
+            var normalizedCost = NormalizeCost(value);
+            _baseSeabourneCost = normalizedCost;
+            _currentSeabourneCost = normalizedCost;
+            SyncCostToModel();
+        }
+    }
+
+    protected int CurrentSeabourneCost => _currentSeabourneCost;
+
+    protected bool IsSeabourneUpgraded => GetUpgradeState();
+
+    protected SeabourneCard(int cost, CardType type, CardRarity rarity, TargetType targetType)
+        : base(cost, type, rarity, targetType)
+    {
+        _baseSeabourneCost = NormalizeCost(cost);
+        _currentSeabourneCost = _baseSeabourneCost;
+        SyncCostToModel();
+    }
+
+    public override string PortraitPath => "res://SEABOURNE/images/card_placeholder.png";
     public override string BetaPortraitPath => PortraitPath;
 
-    public virtual decimal PrimaryDamage => GetVarValue("Damage");
-    public virtual decimal PrimaryBlock => GetVarValue("Block");
-    public decimal Damage => PrimaryDamage;
-    public decimal BlockValue => PrimaryBlock;
-    public virtual int EnergyGain => 0;
-
-    protected static DamageVar DamageVar(decimal value) => new(value, MoveProp);
-    protected static BlockVar BlockVar(decimal value) => new(value, MoveProp);
-
-    protected decimal GetVarValue(string id)
+    protected async Task ApplySeabourneGemModifiers()
     {
-        if (!DynamicVars.TryGetValue(id, out var dynamicVar))
-            return 0m;
+        ResetGemRuntimeModifiers();
+        await SeabourneGemSystem.ApplyGemModifiers(this);
+        await SeabourneGemSystem.ApplyRuntimePlayEffects(this);
 
-        var previewValue = SeabourneReflection.GetDecimal(dynamicVar, "PreviewValue");
-        if (previewValue > 0m)
-            return previewValue;
-
-        var baseValue = SeabourneReflection.GetDecimal(dynamicVar, "BaseValue");
-        if (baseValue > 0m)
-            return baseValue;
-
-        return SeabourneReflection.GetDecimal(
-            dynamicVar,
-            "CurrentValue",
-            "Value",
-            "Amount",
-            "CanonicalValue");
+        if (GemCostReduction > 0)
+            ReduceCurrentCostBy(GemCostReduction);
     }
 
-    protected void UpgradeDamage(decimal amount) => DynamicVars["Damage"].UpgradeValueBy(amount);
-    protected void UpgradeBlock(decimal amount) => DynamicVars["Block"].UpgradeValueBy(amount);
-    protected void UpgradeCost(int newCost) => SeabourneCardRuntime.SetCost(this, newCost);
+    protected void SetBaseCost(int cost) => SeabourneCost = cost;
 
-    protected Task Attack(PlayerChoiceContext choiceContext, CardPlay play, decimal amount, int hitCount = 1) =>
-        SeabourneCardRuntime.Attack(choiceContext, this, play, amount, hitCount);
+    protected void ReduceBaseCostBy(int amount) =>
+        SeabourneCost = NormalizeCost(_baseSeabourneCost - Math.Max(0, amount));
 
-    protected Task AttackAll(PlayerChoiceContext choiceContext, CardPlay play, decimal amount, int hitCount = 1) =>
-        SeabourneCardRuntime.AttackAll(choiceContext, this, play, amount, hitCount);
-
-    protected Task Block(PlayerChoiceContext choiceContext, CardPlay play, decimal amount) =>
-        SeabourneCardRuntime.GainBlock(choiceContext, this, play, amount);
-
-    protected Task ApplySelf<TPower>(PlayerChoiceContext choiceContext, CardPlay play, int amount)
-        where TPower : SEABOURNEPower, new() =>
-        SeabourneCardRuntime.ApplySelf<TPower>(choiceContext, this, play, amount);
-
-    protected Task ApplyTarget<TPower>(PlayerChoiceContext choiceContext, CardPlay play, int amount)
-        where TPower : SEABOURNEPower, new() =>
-        SeabourneCardRuntime.ApplyTarget<TPower>(choiceContext, this, play, amount);
-
-    protected Task ApplyAll<TPower>(PlayerChoiceContext choiceContext, CardPlay play, int amount)
-        where TPower : SEABOURNEPower, new() =>
-        SeabourneCardRuntime.ApplyAll<TPower>(choiceContext, this, play, amount);
-
-    protected Task Cast(PlayerChoiceContext choiceContext, CardPlay play, int amount) =>
-        SeabourneCardRuntime.Cast(choiceContext, this, play, amount);
-
-    protected Task Reel(PlayerChoiceContext choiceContext, CardPlay play) =>
-        SeabourneCardRuntime.Reel(choiceContext, this, play);
-
-    protected bool Acquire(CardPlay play, SeabourneGemType gem) =>
-        SeabourneCardRuntime.AcquireGem(play, gem);
-
-    protected Task FireCannon(PlayerChoiceContext choiceContext, CardPlay play) =>
-        SeabourneCardRuntime.FireCannon(choiceContext, this, play);
-
-    protected Task LoadCannon(PlayerChoiceContext choiceContext, CardPlay play) =>
-        SeabourneCardRuntime.LoadCannon(choiceContext, this, play, this);
-
-    protected Task AddCardCopiesToHand<TCard>(PlayerChoiceContext choiceContext, CardPlay play, int count)
-        where TCard : CardModel, new() =>
-        SeabourneCardRuntime.AddCardCopiesToHand<TCard>(choiceContext, this, play, count);
-
-    protected Task AddCardCopyToDiscard<TCard>(PlayerChoiceContext choiceContext, CardPlay play, int count = 1)
-        where TCard : CardModel, new() =>
-        SeabourneCardRuntime.AddCardCopyToDiscard<TCard>(choiceContext, this, play, count);
-
-    protected Task GainEnergy(CardPlay play, int amount) => SeabourneCardRuntime.GainEnergy(this, play, amount);
-    protected void AddWet(int amount) => SeabourneCardRuntime.AddWet(this, amount);
-    protected void AddImbued(int amount) => SeabourneCardRuntime.AddImbued(this, amount);
-    protected void SetUnimbued() => SeabourneCardRuntime.SetUnimbued(this);
-
-    public virtual Task OnReeled(PlayerChoiceContext choiceContext, CardPlay play, SeabourneCard source)
+    protected void SetCurrentCost(int cost)
     {
-        return OnPlay(choiceContext, play);
+        _currentSeabourneCost = NormalizeCost(cost);
+        SyncCostToModel();
     }
 
-    private static TargetType ParseTarget(params string[] names)
+    protected void ReduceCurrentCostBy(int amount)
     {
-        foreach (var name in names)
+        _currentSeabourneCost = NormalizeCost(_currentSeabourneCost - Math.Max(0, amount));
+        SyncCostToModel();
+    }
+
+    protected void ResetCurrentCost()
+    {
+        _currentSeabourneCost = _baseSeabourneCost;
+        SyncCostToModel();
+    }
+
+    protected decimal ModifyGemDamage(decimal baseDamage) => Math.Ceiling(baseDamage * GemDamageMultiplier);
+
+    public decimal ModifyExternalGemDamage(decimal baseDamage) => ModifyGemDamage(baseDamage);
+
+    protected int ModifyGemStacks(int baseStacks) => Math.Max(0, baseStacks + GemStackBonus);
+
+    protected int ModifyGemCast(int baseCast) => Math.Max(0, baseCast + GemAddedCast);
+
+    protected int ModifyGemReel(int baseReel) => Math.Max(0, baseReel + GemAddedReel);
+
+    protected async Task ApplyGemWetIfAny()
+    {
+        if (GemAddedWet > 0)
+            await SeabornePowerTools.ApplyPowerToPlayer(WetCardPower.Id, GemAddedWet);
+    }
+
+    private void ResetGemRuntimeModifiers()
+    {
+        GemDamageMultiplier = 1m;
+        GemStackBonus = 0;
+        GemCostReduction = 0;
+        GemAddedCast = 0;
+        GemAddedReel = 0;
+        GemAddedWet = 0;
+        GemShouldExhaust = false;
+        ResetCurrentCost();
+    }
+
+    private void SyncCostToModel()
+    {
+        foreach (var memberName in BaseCostMemberNames)
+            TrySetNumericMember(memberName, _baseSeabourneCost);
+
+        foreach (var memberName in CurrentCostMemberNames)
+            TrySetNumericMember(memberName, _currentSeabourneCost);
+
+        var costIsModified = _currentSeabourneCost != _baseSeabourneCost;
+        foreach (var memberName in CostFlagNames)
+            TrySetBooleanMember(memberName, costIsModified);
+    }
+
+    private void TrySetNumericMember(string memberName, int value)
+    {
+        foreach (Type type in GetTypeHierarchy())
         {
-            try
+            var property = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (property is { CanWrite: true } && TrySetNumericProperty(property, value))
+                return;
+
+            var field = type.GetField(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (field is not null && TrySetNumericField(field, value))
+                return;
+        }
+    }
+
+    private void TrySetBooleanMember(string memberName, bool value)
+    {
+        foreach (Type type in GetTypeHierarchy())
+        {
+            var property = type.GetProperty(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (property is { CanWrite: true } && property.PropertyType == typeof(bool))
             {
-                return (TargetType)Enum.Parse(typeof(TargetType), name);
+                try
+                {
+                    property.SetValue(this, value);
+                    return;
+                }
+                catch
+                {
+                }
             }
-            catch
+
+            var field = type.GetField(memberName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            if (field?.FieldType == typeof(bool))
             {
+                try
+                {
+                    field.SetValue(this, value);
+                    return;
+                }
+                catch
+                {
+                }
             }
         }
-
-        return default;
     }
 
-    private static ValueProp ParseValueProp(params string[] names)
-    {
-        foreach (var name in names)
-        {
-            try
-            {
-                return (ValueProp)Enum.Parse(typeof(ValueProp), name);
-            }
-            catch
-            {
-            }
-        }
-
-        return default;
-    }
-
-    private static CardTag? TryParseTag(string name)
+    private bool TrySetNumericProperty(PropertyInfo property, int value)
     {
         try
         {
-            return (CardTag)Enum.Parse(typeof(CardTag), name);
+            if (property.PropertyType == typeof(int))
+            {
+                property.SetValue(this, value);
+                return true;
+            }
+
+            if (property.PropertyType == typeof(int?))
+            {
+                property.SetValue(this, (int?)value);
+                return true;
+            }
+
+            if (property.PropertyType == typeof(decimal))
+            {
+                property.SetValue(this, Convert.ToDecimal(value));
+                return true;
+            }
+
+            if (property.PropertyType == typeof(decimal?))
+            {
+                property.SetValue(this, (decimal?)Convert.ToDecimal(value));
+                return true;
+            }
         }
         catch
         {
-            return null;
         }
+
+        return false;
     }
+
+    private bool TrySetNumericField(FieldInfo field, int value)
+    {
+        try
+        {
+            if (field.FieldType == typeof(int))
+            {
+                field.SetValue(this, value);
+                return true;
+            }
+
+            if (field.FieldType == typeof(int?))
+            {
+                field.SetValue(this, (int?)value);
+                return true;
+            }
+
+            if (field.FieldType == typeof(decimal))
+            {
+                field.SetValue(this, Convert.ToDecimal(value));
+                return true;
+            }
+
+            if (field.FieldType == typeof(decimal?))
+            {
+                field.SetValue(this, (decimal?)Convert.ToDecimal(value));
+                return true;
+            }
+        }
+        catch
+        {
+        }
+
+        return false;
+    }
+
+    private IEnumerable<Type> GetTypeHierarchy()
+    {
+        for (Type? type = GetType(); type is not null; type = type.BaseType)
+            yield return type;
+    }
+
+    private bool GetUpgradeState()
+    {
+        object self = this;
+        foreach (var name in new[] { "IsUpgraded", "UpgradedCount", "UpgradeCount", "TimesUpgraded" })
+        {
+            var property =
+                self.GetType().BaseType?.GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance) ??
+                self.GetType().GetProperty(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            var value = property?.GetValue(self);
+            if (value is bool flag)
+                return flag;
+            if (value is int count)
+                return count > 0;
+        }
+
+        return false;
+    }
+
+    private static int NormalizeCost(int cost) => Math.Max(-1, cost);
+
+    protected static IEnumerable<DamageVar> DamageVar(decimal amount) => [new DamageVar(amount, ValueProp.Move)];
+    protected static IEnumerable<BlockVar> BlockVar(decimal amount) => [new BlockVar(amount, ValueProp.Move)];
 }

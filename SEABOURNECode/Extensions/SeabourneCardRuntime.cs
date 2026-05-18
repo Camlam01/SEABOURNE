@@ -1,5 +1,6 @@
 using System.Collections;
 using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -38,25 +39,25 @@ public static class SeabourneCardRuntime
             return;
 
         var finalDamage = SeabourneState.ApplyDamageMods(card, play, damage);
-        var command = CommonActions.CardAttack(card, target, finalDamage, hitCount);
+        dynamic command = CommonActions.CardAttack(card, target, finalDamage, hitCount);
         await SeabourneReflection.ExecuteCommand(command, choiceContext);
-        await NotifyModifierPlay(choiceContext, card, play);
+        NotifyModifierPlay(card, play);
     }
 
     public static async Task AttackAll(PlayerChoiceContext choiceContext, SeabourneCard card, CardPlay play, decimal damage, int hitCount = 1)
     {
-        var player = SeabourneReflection.GetPlayer(play);
-        if (player is null)
+        var creature = SeabourneReflection.GetCreature(play);
+        if (creature is null)
             return;
 
         var finalDamage = SeabourneState.ApplyDamageMods(card, play, damage);
-        foreach (var enemy in SeabourneReflection.GetEnemies(player))
+        foreach (var enemy in SeabourneReflection.GetEnemies(creature))
         {
-            var command = CommonActions.CardAttack(card, enemy, finalDamage, hitCount);
+            dynamic command = CommonActions.CardAttack(card, enemy, finalDamage, hitCount);
             await SeabourneReflection.ExecuteCommand(command, choiceContext);
         }
 
-        await NotifyModifierPlay(choiceContext, card, play);
+        NotifyModifierPlay(card, play);
     }
 
     public static async Task GainBlock(PlayerChoiceContext choiceContext, SeabourneCard card, CardPlay play, decimal amount)
@@ -67,19 +68,19 @@ public static class SeabourneCardRuntime
 
         var finalAmount = SeabourneState.ApplyBlockMods(card, play, amount);
         await SeabourneState.GainBlock(card, creature, finalAmount);
-        await NotifyModifierPlay(choiceContext, card, play);
+        NotifyModifierPlay(card, play);
     }
 
     public static async Task ApplySelf<TPower>(PlayerChoiceContext choiceContext, SeabourneCard card, CardPlay play, int amount)
         where TPower : SEABOURNEPower, new()
     {
-        var creature = SeabourneReflection.GetCreature(play);
-        if (creature is null)
+        var player = SeabourneReflection.GetPlayer(play);
+        if (player is null)
             return;
 
         var stacks = SeabourneState.ApplyStackMods(card, play, amount);
         await CommonActions.ApplySelf<TPower>(choiceContext, card, stacks, false);
-        await NotifyModifierPlay(choiceContext, card, play);
+        NotifyModifierPlay(card, play);
     }
 
     public static async Task ApplyTarget<TPower>(PlayerChoiceContext choiceContext, SeabourneCard card, CardPlay play, int amount)
@@ -91,28 +92,27 @@ public static class SeabourneCardRuntime
 
         var stacks = SeabourneState.ApplyStackMods(card, play, amount);
         await CommonActions.Apply<TPower>(choiceContext, target, card, stacks, false);
-        await NotifyModifierPlay(choiceContext, card, play);
+        NotifyModifierPlay(card, play);
     }
 
     public static async Task ApplyAll<TPower>(PlayerChoiceContext choiceContext, SeabourneCard card, CardPlay play, int amount)
         where TPower : SEABOURNEPower, new()
     {
-        var player = SeabourneReflection.GetPlayer(play);
-        if (player is null)
+        var creature = SeabourneReflection.GetCreature(play);
+        if (creature is null)
             return;
 
         var stacks = SeabourneState.ApplyStackMods(card, play, amount);
-        foreach (var enemy in SeabourneReflection.GetEnemies(player))
+        foreach (var enemy in SeabourneReflection.GetEnemies(creature))
             await CommonActions.Apply<TPower>(choiceContext, enemy, card, stacks, false);
 
-        await NotifyModifierPlay(choiceContext, card, play);
+        NotifyModifierPlay(card, play);
     }
 
     public static async Task Cast(PlayerChoiceContext choiceContext, SeabourneCard card, CardPlay play, int amount)
     {
         var player = SeabourneReflection.GetPlayer(play);
-        var creature = SeabourneReflection.GetCreature(play);
-        if (player is null || creature is null)
+        if (player is null)
             return;
 
         var adjusted = SeabourneState.ApplyCastMods(card, play, amount);
@@ -133,11 +133,10 @@ public static class SeabourneCardRuntime
             return;
 
         var discard = SeabourneReflection.GetDiscard(player);
-        var hand = SeabourneReflection.GetHand(player);
-        if (discard is null || hand is null || discard.Count == 0)
+        if (discard is null || discard.Count == 0)
             return;
 
-        var cast = SeabourneReflection.FindPower<CastPower>(creature);
+        var cast = SeabourneReflection.FindPower<CastPower>(player);
         var hookDepth = Math.Max(1, cast?.Amount ?? 1);
         var topIndex = discard.Count - 1;
         var hookedIndex = Math.Max(0, discard.Count - hookDepth);
@@ -151,8 +150,6 @@ public static class SeabourneCardRuntime
 
         foreach (var reeledCard in reeled)
         {
-            SeabourneReflection.RemoveFromList(discard, reeledCard);
-
             var modifiers = SeabourneState.Card(reeledCard);
             var wetStacks = Math.Max(0, modifiers.WetStacks);
 
@@ -161,37 +158,30 @@ public static class SeabourneCardRuntime
                 for (var repeat = 0; repeat < wetStacks; repeat++)
                     await wetCard.OnReeled(choiceContext, play, wetCard);
             }
-            else if (!SeabourneReflection.IsHandFull(player))
-            {
-                SeabourneReflection.AddToList(hand, reeledCard);
-            }
             else
             {
-                SeabourneReflection.AddToList(discard, reeledCard);
+                await CardPileCmd.Add(reeledCard, PileType.Hand, CardPilePosition.Bottom, card);
             }
 
-            SeabourneState.Turn(player).ReeledCardsThisTurn++;
+            SeabourneState.Turn(creature).ReeledCardsThisTurn++;
 
-            if (SeabourneReflection.FindPower<FishermansFortitudePower>(creature) is { } fortitude)
+            if (SeabourneReflection.FindPower<FishermansFortitudePower>(player) is { } fortitude)
                 await SeabourneState.GainBlock(card, creature, fortitude.Amount);
 
-            if (SeabourneReflection.FindPower<BarbedHookPower>(creature) is { } hook)
+            if (SeabourneReflection.FindPower<BarbedHookPower>(player) is { } hook)
                 await CommonActions.ApplySelf<TemporaryStrengthPower>(choiceContext, card, hook.Amount, false);
 
-            if (SeabourneState.Turn(player).EnchantedRodRemaining > 0)
+            if (SeabourneState.Turn(creature).EnchantedRodRemaining > 0)
             {
                 SeabourneState.Card(reeledCard).ImbuedStacks += 1;
-                SeabourneState.Turn(player).EnchantedRodRemaining--;
+                SeabourneState.Turn(creature).EnchantedRodRemaining--;
             }
         }
 
-        SeabourneState.Turn(player).ReelsThisTurn++;
+        SeabourneState.Turn(creature).ReelsThisTurn++;
 
         if (cast is not null)
-            SeabourneReflection.SetPowerAmount(cast, 0, false);
-
-        foreach (var relic in SeabourneState.GetSeabourneRelics(player))
-            await relic.OnReel(choiceContext, reeled.Count);
+            SeabourneReflection.SetPowerAmount(cast, 0);
     }
 
     public static bool AcquireGem(CardPlay play, SeabourneGemType gem)
@@ -207,13 +197,13 @@ public static class SeabourneCardRuntime
         if (player is null || creature is null)
             return;
 
-        var cannon = SeabourneState.Cannon(player);
+        var cannon = SeabourneState.Cannon(creature);
         if (cannon.LoadedCards.Count == 0)
         {
-            foreach (var enemy in SeabourneReflection.GetEnemies(player))
+            foreach (var enemy in SeabourneReflection.GetEnemies(creature))
             {
-                var command = CommonActions.CardAttack(source, enemy, 6m, 1);
-                await SeabourneReflection.ExecuteCommand(command, choiceContext);
+                dynamic cmd = CommonActions.CardAttack(source, enemy, 6m, 1);
+                await SeabourneReflection.ExecuteCommand(cmd, choiceContext);
             }
 
             return;
@@ -224,7 +214,7 @@ public static class SeabourneCardRuntime
         cannon.LoadedCards.Clear();
 
         var multiplier = 1m;
-        if (SeabourneReflection.FindPower<ExplosiveGunpowderPower>(creature) is not null)
+        if (SeabourneReflection.FindPower<ExplosiveGunpowderPower>(player) is not null)
             multiplier *= 2m;
 
         foreach (var relic in SeabourneState.GetSeabourneRelics(player))
@@ -239,74 +229,65 @@ public static class SeabourneCardRuntime
 
     public static Task LoadCannon(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, CardModel loadedCard)
     {
-        var player = SeabourneReflection.GetPlayer(play);
-        if (player is null)
+        var creature = SeabourneReflection.GetCreature(play);
+        if (creature is null)
             return Task.CompletedTask;
 
+        var player = SeabourneReflection.GetPlayer(play);
         var hand = SeabourneReflection.GetHand(player);
         var discard = SeabourneReflection.GetDiscard(player);
         SeabourneReflection.RemoveFromList(hand, loadedCard);
         SeabourneReflection.RemoveFromList(discard, loadedCard);
-        SeabourneState.Cannon(player).LoadedCards.Add(loadedCard);
-        return NotifyModifierPlay(choiceContext, source, play);
+        SeabourneState.Cannon(creature).LoadedCards.Add(loadedCard);
+        NotifyModifierPlay(source, play);
+        return Task.CompletedTask;
     }
 
-    public static Task AddCardCopiesToHand<TCard>(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, int count)
+    public static async Task AddCardCopiesToHand<TCard>(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, int count)
         where TCard : CardModel, new()
     {
         var player = SeabourneReflection.GetPlayer(play);
         if (player is null)
-            return Task.CompletedTask;
+            return;
 
         var hand = SeabourneReflection.GetHand(player);
         if (hand is null)
-            return Task.CompletedTask;
+            return;
 
         for (var i = 0; i < count; i++)
             hand.Add(ModelDb.Card<TCard>().ToMutable());
-
-        return Task.CompletedTask;
     }
 
-    public static Task AddCardCopyToDiscard<TCard>(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, int count = 1)
+    public static async Task AddCardCopyToDiscard<TCard>(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, int count = 1)
         where TCard : CardModel, new()
     {
         var player = SeabourneReflection.GetPlayer(play);
         if (player is null)
-            return Task.CompletedTask;
+            return;
 
         var discard = SeabourneReflection.GetDiscard(player);
         if (discard is null)
-            return Task.CompletedTask;
+            return;
 
         for (var i = 0; i < count; i++)
             discard.Add(ModelDb.Card<TCard>().ToMutable());
-
-        return Task.CompletedTask;
     }
 
-    public static Task GainEnergy(SeabourneCard source, CardPlay play, int amount)
+    public static async Task GainEnergy(SeabourneCard source, CardPlay play, int amount)
     {
-        var player = SeabourneReflection.GetPlayer(play);
-        if (player is not null)
-            SeabourneState.GainEnergy(player, amount);
-
-        return Task.CompletedTask;
+        var creature = SeabourneReflection.GetCreature(play);
+        if (creature is not null)
+            SeabourneState.GainEnergy(creature, amount);
     }
 
-    public static Task LoadSpecificCard(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, CardModel loadedCard)
-    {
-        return LoadCannon(choiceContext, source, play, loadedCard);
-    }
+    public static Task LoadSpecificCard(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, CardModel loadedCard) =>
+        LoadCannon(choiceContext, source, play, loadedCard);
 
     public static int RemoveAllGems(object owner) => SeabourneState.Gems(owner).RemoveAll();
 
     public static void AddWet(CardModel card, int amount) => SeabourneState.Card(card).WetStacks += Math.Max(0, amount);
-
     public static void AddImbued(CardModel card, int amount) => SeabourneState.Card(card).ImbuedStacks += Math.Max(0, amount);
-
     public static void SetUnimbued(CardModel card, bool value = true) => SeabourneState.Card(card).Unimbued = value;
-
     public static void RechargeGems(object owner) => SeabourneState.Gems(owner).Recharge();
 
     private static async Task ResolveCannonball(PlayerChoiceContext choiceContext, SeabourneCard source, CardPlay play, CardModel card, Creature? target, decimal multiplier)
@@ -335,17 +316,16 @@ public static class SeabourneCardRuntime
                 await GainEnergy(vimshot, play, vimshot.EnergyGain);
                 break;
             default:
-                if (card is SeabourneCard seaborneCard)
-                    await Attack(choiceContext, seaborneCard, play, seaborneCard.PrimaryDamage * multiplier);
+                if (card is SeabourneCard seabourneCard)
+                    await Attack(choiceContext, seabourneCard, play, seabourneCard.PrimaryDamage * multiplier);
                 break;
         }
     }
 
-    private static async Task NotifyModifierPlay(PlayerChoiceContext choiceContext, SeabourneCard card, CardPlay play)
+    private static void NotifyModifierPlay(SeabourneCard card, CardPlay play)
     {
-        var player = SeabourneReflection.GetPlayer(play);
         var creature = SeabourneReflection.GetCreature(play);
-        if (player is null || creature is null)
+        if (creature is null)
             return;
 
         if (!SeabourneState.HasAnyModifier(card))
@@ -353,10 +333,10 @@ public static class SeabourneCardRuntime
 
         if (SeabourneReflection.FindPower<IdolatryPower>(creature) is { } idolatry)
         {
-            foreach (var enemy in SeabourneReflection.GetEnemies(player))
+            foreach (var enemy in SeabourneReflection.GetEnemies(creature))
             {
-                var command = CommonActions.CardAttack(card, enemy, idolatry.Amount, 1);
-                await SeabourneReflection.ExecuteCommand(command, choiceContext);
+                dynamic cmd = CommonActions.CardAttack(card, enemy, idolatry.Amount, 1);
+                _ = cmd;
             }
         }
     }
