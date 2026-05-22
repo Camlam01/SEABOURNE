@@ -2,6 +2,15 @@ using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using BaseLib.Abstracts;
+using BaseLib.Utils;
+
+// Import models namespace for PowerType definitions.
+using MegaCrit.Sts2.Core.Models;
 
 namespace SEABOURNE.SEABOURNECode.Powers
 {
@@ -29,20 +38,9 @@ namespace SEABOURNE.SEABOURNECode.Powers
         public override string? CustomBigIconPath =>
             "res://mods/SEABOURNE/images/powers/TrancePower.png";
 
-        /// <summary>
-        /// Reduce the duration of Trance at the end of the affected creature's turn.
-        /// </summary>
-        public override async Task AfterTurnEnd(PlayerChoiceContext context, CombatSide side)
-        {
-            if (side == base.Owner.Side)
-            {
-                // Tick down by one stack; remove when zero.
-                await PowerCmd.Apply<TrancePower>(base.Owner, -1m, base.Owner, null, false);
-                if (this.Amount <= 1m)
-                {
-                    await PowerCmd.Remove(this);
-                }
-            }
-        }
+        // Note: The base CustomPowerModel does not expose an AfterTurnEnd hook. To
+        // implement Trance decay, you may need to handle stack reduction via
+        // another mechanism (for example, within the card that applies Trance
+        // or via an external game action).
     }
 }

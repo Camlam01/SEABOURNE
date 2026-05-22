@@ -3,6 +3,14 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
+using BaseLib.Abstracts;
+using BaseLib.Utils;
+
+// Import models namespace for PowerType definitions.
+using MegaCrit.Sts2.Core.Models;
 
 namespace SEABOURNE.SEABOURNECode.Powers
 {
@@ -37,17 +45,9 @@ namespace SEABOURNE.SEABOURNECode.Powers
             await OnCardPlayed(context, cardPlay);
         }
 
-        /// <summary>
-        /// Reset gem powers at the end of the owner's turn so they recharge.
-        /// </summary>
-        public override Task AfterTurnEnd(PlayerChoiceContext context, CombatSide side)
-        {
-            if (side == base.Owner.Side)
-            {
-                _usedThisTurn = false;
-            }
-            return Task.CompletedTask;
-        }
+        // Note: CustomPowerModel in BaseLib does not expose an AfterTurnEnd hook. If you
+        // need to reset gem usage at the end of a turn, implement the logic elsewhere
+        // (for example, via a card effect or another power that tracks turn boundaries).
 
         /// <summary>
         /// Derived classes implement their enhancement in this method. Call
