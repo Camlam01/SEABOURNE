@@ -12,6 +12,9 @@ using BaseLib.Utils;
 // Import models namespace for PowerType definitions.
 using MegaCrit.Sts2.Core.Models;
 
+// Import commands namespace for PowerCmd.
+using MegaCrit.Sts2.Core.Commands;
+
 namespace SEABOURNE.SEABOURNECode.Powers
 {
     /// <summary>

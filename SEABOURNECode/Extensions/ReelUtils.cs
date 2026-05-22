@@ -6,8 +6,13 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Models.Cards;
+// Bring in the base models namespace so that we can reference CardModel unambiguously.
+using MegaCrit.Sts2.Core.Models;
 using SEABOURNE.SEABOURNECode.Powers;
+
+// Alias CardModel to the version from the models namespace. There is a CardModel type in
+// MegaCrit.Sts2.Core.Entities as well, but the commands APIs operate on the model version.
+using ModelCard = MegaCrit.Sts2.Core.Models.CardModel;
 
 namespace SEABOURNE.SEABOURNECode.Mechanics
 {
@@ -38,11 +43,14 @@ namespace SEABOURNE.SEABOURNECode.Mechanics
             // Determine which cards in the discard pile to retrieve. The discard pile is assumed
             // to have the most recently discarded card at the end of the list. We take up to
             // castAmount cards from the end.
-            var cards = discardPile.Cards.ToList();
+            // Cast the discard pile cards to the model CardModel type. Some APIs operate on the
+            // model version of CardModel, so we explicitly cast here. If the discard pile
+            // contains entities other than CardModel, they will be ignored.
+            var cards = discardPile.Cards.Cast<ModelCard>().ToList();
             int toTake = Math.Min(castAmount, cards.Count);
 
             // Collect the cards to reel in correct order: from deepest (oldest) to newest.
-            List<CardModel> cardsToReel = new List<CardModel>();
+            List<ModelCard> cardsToReel = new List<ModelCard>();
             for (int i = cards.Count - toTake; i < cards.Count; i++)
             {
                 if (i >= 0 && i < cards.Count)
@@ -68,7 +76,9 @@ namespace SEABOURNE.SEABOURNECode.Mechanics
                     // If the hand is full the card goes back to the discard pile according to
                     // standard Slay the Spire rules.
                     var hand = PileType.Hand.GetPile(player);
-                    if (hand.Cards.Count >= player.MaxHandSize)
+                    // Slay the Spire 2 enforces a maximum hand size of 10 cards. When the hand is
+                    // full, additional cards drawn or reeled should be sent to the discard pile.
+                    if (hand.Cards.Count >= 10)
                     {
                         await CardPileCmd.Add(card, PileType.Discard, CardPilePosition.Top, null, false);
                     }
