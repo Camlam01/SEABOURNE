@@ -39,6 +39,7 @@ namespace SEABOURNE.SEABOURNECode.Powers
             // overloads that include a PlayerChoiceContext parameter.
             this.Flash();
             await MegaCrit.Sts2.Core.Commands.PowerCmd.Apply<CastPower>(
+                choiceContext: context,
                 target: base.Owner,
                 amount: 1m,
                 applier: base.Owner,
