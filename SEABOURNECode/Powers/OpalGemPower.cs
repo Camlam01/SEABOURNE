@@ -34,7 +34,11 @@ namespace SEABOURNE.SEABOURNECode.Powers
         {
             // Grant one Cast when the first card is played this turn.
             this.Flash();
-            await PowerCmd.Apply<CastPower>(base.Owner, 1m, base.Owner, cardPlay.Card, false);
+            // Use the fully-qualified PowerCmd to avoid ambiguous or missing type resolution. This
+            // call applies one stack of CastPower to the owner. Note that the generic parameter
+            // identifies the type of power to apply, followed by the target creature, amount,
+            // applier, card source, and silent flag.
+            await MegaCrit.Sts2.Core.Commands.PowerCmd.Apply<CastPower>(base.Owner, 1m, base.Owner, cardPlay.Card, false);
             MarkUsed();
         }
     }

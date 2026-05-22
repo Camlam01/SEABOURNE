@@ -14,7 +14,7 @@ using SEABOURNE.SEABOURNECode.Powers;
 // MegaCrit.Sts2.Core.Entities as well, but the commands APIs operate on the model version.
 using ModelCard = MegaCrit.Sts2.Core.Models.CardModel;
 
-namespace SEABOURNE.SEABOURNECode.Extensions
+namespace SEABOURNE.SEABOURNECode.Mechanics
 {
     /// <summary>
     /// Provides helper methods for resolving the reel mechanic. Reeling pulls a sequence of cards
@@ -88,7 +88,7 @@ namespace SEABOURNE.SEABOURNECode.Extensions
             var castPower = player.Creature.GetPower<CastPower>();
             if (castPower != null)
             {
-                // Remove all stacks of CastPower via the fully‑qualified PowerCmd. The Remove
+                // Remove all stacks of CastPower via the fully-qualified PowerCmd. The Remove
                 // method accepts a PowerModel instance and handles unhooking and clean‑up.
                 await MegaCrit.Sts2.Core.Commands.PowerCmd.Remove(castPower);
             }
