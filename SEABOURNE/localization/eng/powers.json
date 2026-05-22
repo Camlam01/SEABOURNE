@@ -96,10 +96,6 @@
   "SEABOURNE-WET_CARD_POWER.description": "Generated placeholder description.",
   "SEABOURNE-WET_CARD_POWER.smartDescription": "Generated placeholder description.",
 
-  // Localization entries for the Wet power applied to cards and creatures. These keys are
-  // required to prevent STS001 build errors when compiling the mod. Wet powers cause
-  // cards with Wet stacks to automatically play themselves when reeled. Each Wet stack
-  // causes the card to replay that many times when reeled.
   "SEABOURNE-WET_POWER.title": "Wet",
   "SEABOURNE-WET_POWER.description": "Cards with Wet stacks automatically play themselves when reeled in. Each Wet stack causes the card to replay that many times when reeled.",
   "SEABOURNE-WET_POWER.smartDescription": "Cards with Wet automatically play themselves when reeled in.",
