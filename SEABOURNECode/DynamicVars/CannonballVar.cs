@@ -23,17 +23,17 @@ namespace SEABOURNE.SEABOURNECode.DynamicVars
         /// base value.  This sets the Name property accordingly.
         /// </summary>
         /// <param name="baseValue">The base number of cannonballs to load.</param>
-        public CannonballVar(decimal baseValue) : base(baseValue)
+        public CannonballVar(decimal baseValue) : base(DefaultName, baseValue)
         {
-            this.Name = DefaultName;
+            // Base constructor assigns Name and BaseValue
         }
 
         /// <summary>
         /// Initializes a new instance of the CannonballVar with a base value of zero.
         /// </summary>
-        public CannonballVar() : base()
+        public CannonballVar() : base(DefaultName, 0m)
         {
-            this.Name = DefaultName;
+            // Default constructor uses zero as base value
         }
     }
 }

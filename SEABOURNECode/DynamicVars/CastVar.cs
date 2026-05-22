@@ -23,18 +23,18 @@ namespace SEABOURNE.SEABOURNECode.DynamicVars
         /// determines how many cards will be hooked when the card is played.
         /// </summary>
         /// <param name="baseValue">The base number of cards to hook.</param>
-        public CastVar(decimal baseValue) : base(baseValue)
+        public CastVar(decimal baseValue) : base(DefaultName, baseValue)
         {
-            this.Name = DefaultName;
+            // Base constructor sets the Name and BaseValue fields
         }
 
         /// <summary>
         /// Creates a new CastVar with a default base value of zero.  The Name
         /// property is set automatically.
         /// </summary>
-        public CastVar() : base()
+        public CastVar() : base(DefaultName, 0m)
         {
-            this.Name = DefaultName;
+            // Default constructor uses zero as base value
         }
     }
 }

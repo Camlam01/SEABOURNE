@@ -21,17 +21,17 @@ namespace SEABOURNE.SEABOURNECode.DynamicVars
         /// determines how many cards will be reeled when the card is played.
         /// </summary>
         /// <param name="baseValue">Number of cards reeled.</param>
-        public ReelVar(decimal baseValue) : base(baseValue)
+        public ReelVar(decimal baseValue) : base(DefaultName, baseValue)
         {
-            this.Name = DefaultName;
+            // Base constructor assigns Name and BaseValue
         }
 
         /// <summary>
         /// Creates a new ReelVar with a default base value of zero.
         /// </summary>
-        public ReelVar() : base()
+        public ReelVar() : base(DefaultName, 0m)
         {
-            this.Name = DefaultName;
+            // Default constructor uses zero as base value
         }
     }
 }
