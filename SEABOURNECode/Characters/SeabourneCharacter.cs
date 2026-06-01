@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using Godot;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Characters;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.Models.PotionPools;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Entities.Characters;
-using BaseLib.Abstracts;
 
-// References to cards, pools and relics specific to the Seabourne mod.  These will
-// need to be implemented separately in their respective namespaces.  The using
-// directives may need adjusting based on your folder structure.
+// Do not import BaseLib.Abstracts here.  The Seabourne mod ships with
+// its own stub definitions for PlaceholderCharacterModel and related
+// types in the MegaCrit.Sts2.Core.Models.Characters namespace.  Using
+// BaseLib.Abstracts would introduce ambiguous references at compile
+// time when the real API assemblies are absent.
 using SEABOURNE.SEABOURNECode.Cards;
 using SEABOURNE.SEABOURNECode.Pools;
 using SEABOURNE.SEABOURNECode.Relics;
@@ -21,8 +21,10 @@ namespace SEABOURNE.SEABOURNECode.Characters
     /// The main character model for the Seabourne mod.  Inherits from
     /// PlaceholderCharacterModel and specifies all of the visual and gameplay
     /// properties required by Slay the Spire 2 to register a playable character.
+    /// When compiled against the real game, the stub PlaceholderCharacterModel
+    /// provided by the Seabourne mod will be replaced by the actual API class.
     /// </summary>
-    public class SeabourneCharacter : PlaceholderCharacterModel
+    public class SeabourneCharacter : MegaCrit.Sts2.Core.Models.Characters.PlaceholderCharacterModel
     {
         /// <summary>
         /// The starting hit points for Seabourne.  Adjust this value based on

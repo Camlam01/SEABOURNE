@@ -10,13 +10,78 @@ using System.Threading.Tasks;
 
 namespace MegaCrit.Sts2.Core.Models.Cards.Enums
 {
-    // This namespace intentionally left empty.  Enumeration types such as
-    // CardType, CardRarity, CardTag and TargetType are defined by the
-    // Slay the Spire 2 API in the MegaCrit.Sts2.Core.Entities.Cards
-    // namespace.  Do not define your own copies here, or you will create
-    // conflicts when linking against the actual game library.  If you see
-    // missing symbol errors for these types, add
-    // 'using MegaCrit.Sts2.Core.Entities.Cards;' to your card files.
+    // ------------------------------------------------------------------
+    // Enumeration definitions
+    //
+    // The real Slay the Spire 2 API defines these enums in the
+    // MegaCrit.Sts2.Core.Entities.Cards namespace.  When building this
+    // mod without access to the game assemblies, these definitions are
+    // provided here to satisfy compile‑time references in card files.
+    // Should you compile against the actual game, remove these stub
+    // definitions to avoid duplicate type errors.  Keeping the enums in
+    // this separate namespace also prevents clashes with the versions in
+    // Entities.Cards.
+
+    /// <summary>
+    /// Represents the category of a card.  Only the common categories used
+    /// by the Seabourne mod are represented here.  Expand this enum if
+    /// additional card types are required.
+    /// </summary>
+    public enum CardType
+    {
+        Attack,
+        Skill,
+        Power,
+        Status,
+        Curse
+    }
+
+    /// <summary>
+    /// Represents the rarity tier of a card.  This stub includes the tiers
+    /// referenced by the Seabourne mod.  Additional rarities can be added
+    /// as needed for future content.
+    /// </summary>
+    public enum CardRarity
+    {
+        Basic,
+        Common,
+        Uncommon,
+        Rare
+    }
+
+    /// <summary>
+    /// Represents special tags applied to cards.  Tags can be used to
+    /// categorise cards for mechanics like strike/defend bonuses or
+    /// exhaust/innate behaviours.  Only a subset of tags needed by the
+    /// Seabourne mod are defined here.  Add more values if your mod
+    /// depends on additional tags.
+    /// </summary>
+    public enum CardTag
+    {
+        Strike,
+        Defend,
+        Exhaust,
+        Innate
+    }
+
+    /// <summary>
+    /// Specifies which creatures a card targets when played.  This enum
+    /// mirrors the values of the TargetType enum used internally by the
+    /// game.  Defining it here allows card definitions to compile without
+    /// referencing the game assemblies.  If you compile against the real
+    /// STS2 API, you may remove this stub.
+    /// </summary>
+    public enum CardTarget
+    {
+        None,
+        Self,
+        AnyEnemy,
+        AllEnemies,
+        RandomEnemy,
+        AnyPlayer,
+        AnyAlly,
+        AllAllies
+    }
 }
 
 namespace MegaCrit.Sts2.Core.Models.Cards
