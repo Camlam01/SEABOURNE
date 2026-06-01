@@ -87,6 +87,6 @@ namespace SEABOURNE.SEABOURNECode.Cards
         /// </summary>
         /// <returns><c>true</c> if the card should move to the discard pile;
         /// otherwise <c>false</c>.</returns>
-        public virtual bool ShouldMoveToDiscard() => true;
+        public override bool ShouldMoveToDiscard() => true;
     }
 }

@@ -10,20 +10,20 @@ using System.Threading.Tasks;
 
 namespace MegaCrit.Sts2.Core.Models.Cards.Enums
 {
-    /// <summary>
-    /// Represents the category of a card (attack, skill, power, etc.).
-    /// </summary>
-    // NOTE: Enumeration definitions have been removed from this stub.  The real STS2
-    // library defines CardType, CardRarity, CardTag and CardTarget in the
-    // MegaCrit.Sts2.Core.Entities.Cards namespace.  When building against the
-    // actual API, those enums will be used instead of these stubs.  If you
-    // encounter missing symbol errors, ensure the correct namespace is
-    // imported in your card files (e.g. using MegaCrit.Sts2.Core.Entities.Cards;).
+    // This namespace intentionally left empty.  Enumeration types such as
+    // CardType, CardRarity, CardTag and TargetType are defined by the
+    // Slay the Spire 2 API in the MegaCrit.Sts2.Core.Entities.Cards
+    // namespace.  Do not define your own copies here, or you will create
+    // conflicts when linking against the actual game library.  If you see
+    // missing symbol errors for these types, add
+    // 'using MegaCrit.Sts2.Core.Entities.Cards;' to your card files.
 }
 
 namespace MegaCrit.Sts2.Core.Models.Cards
 {
-    using MegaCrit.Sts2.Core.Models.Cards.Enums;
+    // The enums CardType, CardRarity and CardTag are declared in
+    // MegaCrit.Sts2.Core.Entities.Cards in this stub.  Do not import the
+    // non‑existent Models.Cards.Enums namespace to avoid missing symbol errors.
     using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
     /// <summary>
@@ -88,7 +88,7 @@ namespace MegaCrit.Sts2.Core.Models.Cards
 
         public CardAspectSequence Empty => new CardAspectSequence();
 
-        public CardAspectSequence From(params MegaCrit.Sts2.Core.Models.Cards.Enums.CardTag[] tags)
+        public CardAspectSequence From(params MegaCrit.Sts2.Core.Entities.Cards.CardTag[] tags)
         {
             return new CardAspectSequence();
         }
@@ -129,15 +129,102 @@ namespace MegaCrit.Sts2.Core.Models.Cards
 
 namespace MegaCrit.Sts2.Core.Entities.Cards
 {
+    // ----------------------------------------------------------------------
+    // NOTE: These enum definitions are provided solely so that the Seabourne mod
+    // can compile in environments where the full Slay the Spire 2 API is not
+    // available.  When building against the actual game, the real definitions
+    // in MegaCrit.Sts2.Core.Entities.Cards will be used instead.  If you see
+    // duplicate definition errors while linking against the game, remove
+    // these stubs.
+
+    // NOTE: CardType, CardRarity and CardTag enums are defined in the actual
+    // Slay the Spire 2 API.  They are intentionally omitted from this stub
+    // to prevent conflicts when building against the game.  If you
+    // encounter missing type errors for these enums, ensure your code imports
+    // MegaCrit.Sts2.Core.Entities.Cards.  The CardTarget enum below is not
+    // provided by the base API; it exists solely so Seabourne card files
+    // referring to CardTarget can compile.  It mirrors the values of the
+    // TargetType enum used internally by the game.
+
     /// <summary>
-    /// A placeholder runtime instance for a card.  In the full game this would
-    /// manage state like upgrades, enchantments and local modifiers.  Here it
-    /// serves only to satisfy type references in extension methods.
+    /// Specifies which creatures a card targets when played.  This stub
+    /// mirrors the values of the TargetType enum in the real API to avoid
+    /// compile errors in mod code.  If you are compiling against the
+    /// game assemblies directly, you can safely ignore this enum.
     /// </summary>
-    // NOTE: CardRuntime is defined in the real STS2 API.  This stub has been
-    // removed to avoid conflicts with the actual implementation.  If you need
-    // to reference CardRuntime within your extension methods, import it from
-    // MegaCrit.Sts2.Core.Entities.Cards.
+    public enum CardTarget
+    {
+        None,
+        Self,
+        AnyEnemy,
+        AllEnemies,
+        RandomEnemy,
+        AnyPlayer,
+        AnyAlly,
+        AllAllies
+    }
+
+    // ----------------------------------------------------------------------
+    // Additional enumeration stubs
+    //
+    // The Slay the Spire 2 API defines several enums in this namespace (e.g.
+    // CardType, CardRarity and CardTag).  Because the real assemblies are not
+    // available in this build environment, we provide minimal definitions
+    // here so that mod code referring to these types can compile.  If you
+    // compile against the real game, remove these definitions to avoid
+    // conflicts and rely on the official enums.
+
+    /// <summary>
+    /// Represents the category of a card.  Only the common categories used
+    /// by the Seabourne mod are represented here.  Additional values may be
+    /// added as needed to satisfy compile‑time references.
+    /// </summary>
+    public enum CardType
+    {
+        Attack,
+        Skill,
+        Power,
+        Status,
+        Curse
+    }
+
+    /// <summary>
+    /// Represents the rarity tier of a card.  This stub includes the tiers
+    /// referenced by the Seabourne mod.  Expand with other rarities if
+    /// necessary for additional content.
+    /// </summary>
+    public enum CardRarity
+    {
+        Basic,
+        Common,
+        Uncommon,
+        Rare
+    }
+
+    /// <summary>
+    /// Represents special tags applied to cards.  Tags can be used to
+    /// categorise cards for mechanics like strike/defend bonuses or
+    /// exhaust/innate behaviours.  This stub defines only a few tags used
+    /// within the Seabourne mod.  Additional tags can be added here to
+    /// support further functionality.
+    /// </summary>
+    public enum CardTag
+    {
+        Strike,
+        Defend,
+        Exhaust,
+        Innate
+    }
+
+    /// <summary>
+    /// Placeholder runtime class for a card.  In the full API this manages
+    /// upgrade state, enchantments and other runtime information.  Here it
+    /// simply holds a reference to the underlying card model.
+    /// </summary>
+    public class CardRuntime
+    {
+        public MegaCrit.Sts2.Core.Models.CardModel CardModel { get; set; }
+    }
 }
 
 namespace MegaCrit.Sts2.Core.Localization.DynamicVars
@@ -148,6 +235,82 @@ namespace MegaCrit.Sts2.Core.Localization.DynamicVars
     /// </summary>
     public interface IDynamicVar
     {
+    }
+
+    // ----------------------------------------------------------------------
+    // Dynamic variable stubs
+    //
+    // The real STS2 API defines a number of dynamic variable types (e.g. DamageVar,
+    // BlockVar, CastVar, ReelVar, CannonballVar and EnergyVar) that plug into
+    // the localisation system and drive numeric text on cards.  To allow the
+    // Seabourne mod to compile without the game assemblies present, we provide
+    // minimal stand‑ins here.  Each dynamic var exposes a static factory
+    // method returning a new instance.  No functional behaviour is implemented.
+
+    public class DamageVar : IDynamicVar
+    {
+        public int BaseValue { get; set; }
+        public int UpgradeValue { get; set; }
+        private DamageVar() { }
+        public static DamageVar ForDamage(int baseValue, int upgradeValue)
+        {
+            return new DamageVar { BaseValue = baseValue, UpgradeValue = upgradeValue };
+        }
+    }
+
+    public class BlockVar : IDynamicVar
+    {
+        public int BaseValue { get; set; }
+        public int UpgradeValue { get; set; }
+        private BlockVar() { }
+        public static BlockVar ForBlock(int baseValue, int upgradeValue)
+        {
+            return new BlockVar { BaseValue = baseValue, UpgradeValue = upgradeValue };
+        }
+    }
+
+    public class CastVar : IDynamicVar
+    {
+        public int BaseValue { get; set; }
+        public int UpgradeValue { get; set; }
+        private CastVar() { }
+        public static CastVar ForCast(int baseValue, int upgradeValue)
+        {
+            return new CastVar { BaseValue = baseValue, UpgradeValue = upgradeValue };
+        }
+    }
+
+    public class ReelVar : IDynamicVar
+    {
+        public int BaseValue { get; set; }
+        public int UpgradeValue { get; set; }
+        private ReelVar() { }
+        public static ReelVar ForReel(int baseValue, int upgradeValue)
+        {
+            return new ReelVar { BaseValue = baseValue, UpgradeValue = upgradeValue };
+        }
+    }
+
+    public class CannonballVar : IDynamicVar
+    {
+        public int BaseValue { get; set; }
+        public int UpgradeValue { get; set; }
+        private CannonballVar() { }
+        public static CannonballVar ForCannonball(int baseValue, int upgradeValue)
+        {
+            return new CannonballVar { BaseValue = baseValue, UpgradeValue = upgradeValue };
+        }
+    }
+
+    public class EnergyVar : IDynamicVar
+    {
+        public int BaseValue { get; set; }
+        public int UpgradeValue { get; set; }
+        private EnergyVar() { }
+        public static EnergyVar ForEnergy(int baseValue, int upgradeValue)
+        {
+            return new EnergyVar { BaseValue = baseValue, UpgradeValue = upgradeValue };
+        }
     }
 
     // NOTE: Dynamic variable classes such as DamageVar, BlockVar, CastVar, ReelVar, CannonballVar
@@ -161,7 +324,7 @@ namespace MegaCrit.Sts2.Core.Localization.DynamicVars
 namespace BaseLib.Abstracts
 {
     using MegaCrit.Sts2.Core.Models.Cards;
-    using MegaCrit.Sts2.Core.Models.Cards.Enums;
+    // The enums are defined in MegaCrit.Sts2.Core.Entities.Cards in this stub.
 
     /// <summary>
     /// Minimal custom card model used for modding.  This stub defines the
@@ -170,6 +333,15 @@ namespace BaseLib.Abstracts
     /// </summary>
     public abstract class CustomCardModel
     {
+        /// <summary>
+        /// Constructs a new card model with the specified cost, type, rarity and target.
+        /// This constructor mirrors the signature provided by the real STS2 API and
+        /// allows derived classes to pass these values when using the stubs.  The
+        /// parameters are not stored or used by this stub implementation.
+        /// </summary>
+        protected CustomCardModel(int cost, MegaCrit.Sts2.Core.Entities.Cards.CardType type, MegaCrit.Sts2.Core.Entities.Cards.CardRarity rarity, MegaCrit.Sts2.Core.Entities.Cards.CardTarget target, bool showInCardLibrary = true, bool autoAdd = true)
+        {
+        }
         /// <summary>Gets the display name of the card.</summary>
         public virtual string Name => string.Empty;
         /// <summary>Gets the description text shown on the card.</summary>
@@ -210,6 +382,182 @@ namespace BaseLib.Abstracts
         /// prevent cards from being discarded immediately.
         /// </summary>
         public virtual bool ShouldMoveToDiscard() => true;
+    }
+}
+
+// ----------------------------------------------------------------------
+// Godot and character stubs
+//
+// Some classes below are referenced by the Seabourne mod but reside in the
+// Godot engine or the STS2 API.  To allow compilation without those
+// assemblies, we provide simplified stand‑ins here.  They do not implement
+// any real functionality.
+
+namespace Godot
+{
+    /// <summary>
+    /// Minimal colour struct used by character models and UI.  The real
+    /// implementation provides many utility methods; here we simply store
+    /// three floats for RGB.  A constructor accepting a hex string is
+    /// provided for convenience but does not parse the string.
+    /// </summary>
+    public struct Color
+    {
+        public float R { get; }
+        public float G { get; }
+        public float B { get; }
+        public Color(float r, float g, float b)
+        {
+            R = r;
+            G = g;
+            B = b;
+        }
+        public Color(string hex)
+        {
+            R = 0f;
+            G = 0f;
+            B = 0f;
+        }
+    }
+}
+
+namespace MegaCrit.Sts2.Core.Entities.Characters
+{
+    /// <summary>
+    /// Enumeration used to indicate the grammatical gender of a character.
+    /// </summary>
+    public enum CharacterGender
+    {
+        Masculine,
+        Feminine,
+        Neutral
+    }
+}
+
+namespace MegaCrit.Sts2.Core.Models
+{
+    using System.Collections.Generic;
+
+    /// <summary>
+    /// Minimal base class for all models.  In the real API this would
+    /// implement localisation and ID logic.  Here it is an empty class
+    /// serving only as a common base type.
+    /// </summary>
+    public abstract class AbstractModel
+    {
+    }
+
+    /// <summary>
+    /// Placeholder card model.  In the real API this class exposes many
+    /// properties and methods relating to cards.  Here it is empty so that
+    /// card definitions can compile.
+    /// </summary>
+    public abstract class CardModel : AbstractModel
+    {
+    }
+
+    /// <summary>
+    /// Placeholder relic model.  In the real API this contains relic
+    /// behaviour and localisation.  This stub is empty.
+    /// </summary>
+    public abstract class RelicModel : AbstractModel
+    {
+    }
+
+    /// <summary>
+    /// Placeholder potion model.  In the real API this contains potion
+    /// behaviour and localisation.  This stub is empty.
+    /// </summary>
+    public abstract class PotionModel : AbstractModel
+    {
+    }
+
+    /// <summary>
+    /// Placeholder card pool model.  In the real API this class defines
+    /// collections of cards available to a character.  Here we leave it
+    /// non‑abstract so derived pools need not implement any members.
+    /// </summary>
+    public class CardPoolModel : AbstractModel
+    {
+    }
+
+    /// <summary>
+    /// Placeholder relic pool model.  Real implementations manage relic
+    /// unlocks and distributions.  Left non‑abstract here.
+    /// </summary>
+    public class RelicPoolModel : AbstractModel
+    {
+    }
+
+    /// <summary>
+    /// Placeholder potion pool model.  Real implementations manage potion
+    /// distributions.  Left non‑abstract here.
+    /// </summary>
+    public class PotionPoolModel : AbstractModel
+    {
+    }
+
+    /// <summary>
+    /// Static helper class used to retrieve model instances via generics in
+    /// SeabourneCharacter.  The real API would return registered models from
+    /// internal dictionaries.  Here we simply instantiate a new object of
+    /// the requested type.  Only a subset of methods required by the
+    /// Seabourne mod are implemented.
+    /// </summary>
+    public static class ModelDb
+    {
+        public static T Card<T>() where T : CardModel, new() => new T();
+        public static T Relic<T>() where T : RelicModel, new() => new T();
+        public static T CardPool<T>() where T : CardPoolModel, new() => new T();
+        public static T RelicPool<T>() where T : RelicPoolModel, new() => new T();
+        public static T PotionPool<T>() where T : PotionPoolModel, new() => new T();
+    }
+}
+
+namespace MegaCrit.Sts2.Core.Models.Characters
+{
+    using System.Collections.Generic;
+    using MegaCrit.Sts2.Core.Entities.Characters;
+    using Godot;
+
+    /// <summary>
+    /// Minimal placeholder character model used by the Seabourne mod.  In the
+    /// real API this class would provide many virtual and abstract members
+    /// controlling character behaviour, visuals and interactions.  The
+    /// SeabourneCharacter class derives from this stub when the game
+    /// assemblies are unavailable.
+    /// </summary>
+    public abstract class PlaceholderCharacterModel : AbstractModel
+    {
+        public virtual int StartingHp => 70;
+        public virtual int StartingGold => 99;
+        // In the real API, characters provide a property named StartingEnergy
+        // to indicate the base energy per turn.  Some earlier versions used
+        // MaxEnergy; to support mods that override StartingEnergy, we expose
+        // both properties.  By default they return the same value.
+        public virtual int StartingEnergy => 3;
+        public virtual int MaxEnergy => StartingEnergy;
+        public virtual Color NameColor => new Color(1f, 1f, 1f);
+        public virtual Color EnergyLabelOutlineColor => new Color(1f, 1f, 1f);
+        public virtual Color MapDrawingColor => new Color(1f, 1f, 1f);
+        public virtual CharacterGender Gender => CharacterGender.Masculine;
+        public virtual string CustomCharacterSelectIconPath => string.Empty;
+        public virtual string CustomCharacterSelectLockedIconPath => string.Empty;
+        public virtual string CustomCharacterSelectBg => string.Empty;
+        public virtual string CustomIconTexturePath => string.Empty;
+        public virtual string CustomIconPath => string.Empty;
+        public virtual string CustomMapMarkerPath => string.Empty;
+        public virtual string CustomVisualPath => string.Empty;
+        public virtual string CustomMerchantAnimPath => string.Empty;
+        public virtual string CustomRestSiteAnimPath => string.Empty;
+        public virtual string CustomEnergyCounterPath => string.Empty;
+        public virtual string CharacterSelectSfx => string.Empty;
+        public virtual IEnumerable<MegaCrit.Sts2.Core.Models.CardModel> StartingDeck => new List<MegaCrit.Sts2.Core.Models.CardModel>();
+        public virtual IReadOnlyList<MegaCrit.Sts2.Core.Models.RelicModel> StartingRelics => new List<MegaCrit.Sts2.Core.Models.RelicModel>();
+        public virtual IReadOnlyList<MegaCrit.Sts2.Core.Models.PotionModel> StartingPotions => new List<MegaCrit.Sts2.Core.Models.PotionModel>();
+        public virtual MegaCrit.Sts2.Core.Models.CardPoolModel CardPool => new MegaCrit.Sts2.Core.Models.CardPoolModel();
+        public virtual MegaCrit.Sts2.Core.Models.RelicPoolModel RelicPool => new MegaCrit.Sts2.Core.Models.RelicPoolModel();
+        public virtual MegaCrit.Sts2.Core.Models.PotionPoolModel PotionPool => new MegaCrit.Sts2.Core.Models.PotionPoolModel();
     }
 }
 

@@ -8,7 +8,8 @@ using MegaCrit.Sts2.Core.Models.Cards;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
-using SEABOURNE.SEABOURNECode.Cards;
+    using SEABOURNE.SEABOURNECode.Cards;
+    using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Attacks
 {

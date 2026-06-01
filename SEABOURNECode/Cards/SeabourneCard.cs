@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Cards;
 // Removed invalid Enums namespace. CardType, CardRarity, CardTag and CardTarget are resolved via global imports or the Entities.Cards namespace.
 using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards
 {
@@ -61,6 +62,6 @@ namespace SEABOURNE.SEABOURNECode.Cards
         /// such as Load where the card does not immediately leave the hand.
         /// </summary>
         /// <returns><c>true</c> if the card should move to the discard pile; otherwise <c>false</c>.</returns>
-        public virtual bool ShouldMoveToDiscard() => true;
+        public override bool ShouldMoveToDiscard() => true;
     }
 }
