@@ -1,9 +1,8 @@
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.Cards;
-// Removed invalid Enums namespace. CardType, CardRarity, CardTag and CardTarget are resolved via global imports or the Entities.Cards namespace.
+using MegaCrit.Sts2.Core.Models.Cards.Enums;
 using BaseLib.Abstracts;
-using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards
 {

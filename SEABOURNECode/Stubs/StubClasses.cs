@@ -155,11 +155,21 @@ namespace MegaCrit.Sts2.Core.Models.Cards
 
         public CardAspectSequence From(params MegaCrit.Sts2.Core.Entities.Cards.CardTag[] tags)
         {
+            // Accept tags defined in the Entities namespace.  No behaviour is
+            // implemented here; the sequence merely serves as a placeholder.
+            return new CardAspectSequence();
+        }
+
+        public CardAspectSequence From(params MegaCrit.Sts2.Core.Models.Cards.Enums.CardTag[] tags)
+        {
+            // Accept tags defined in the Models.Cards.Enums namespace.  This overload
+            // allows callers to pass tags without importing the Entities namespace.
             return new CardAspectSequence();
         }
 
         public CardAspectSequence From(params SEABOURNE.SEABOURNECode.SeabourneTag[] tags)
         {
+            // Accept custom Seabourne tags defined in the SEABOURNECode namespace.
             return new CardAspectSequence();
         }
     }

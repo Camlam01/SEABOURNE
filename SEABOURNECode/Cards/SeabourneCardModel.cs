@@ -1,8 +1,10 @@
 using System.Linq;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
-// Removed invalid Enums namespace.  Enumerations such as CardType, CardRarity and TargetType are resolved via global imports or the Entities.Cards namespace.
-using MegaCrit.Sts2.Core.Entities.Cards;
+// Import enumerations from Models.Cards.Enums.  The stubs define CardType, CardRarity,
+// CardTag and CardTarget here to avoid missing symbol errors when the
+// game assemblies are unavailable.
+using MegaCrit.Sts2.Core.Models.Cards.Enums;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
 
