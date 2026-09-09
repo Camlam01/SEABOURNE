@@ -1,14 +1,13 @@
-using MegaCrit.Sts2.Core.Models;
+using BaseLib.Abstracts;
+using Godot;
 
-namespace SEABOURNE.SEABOURNECode.Pools
+namespace SEABOURNE.SEABOURNECode.Pools;
+
+/// <summary>
+/// Relic pool for the Seabourne character. BaseLib automatically populates
+/// this pool with custom relic models assigned to it.
+/// </summary>
+public class SeabourneRelicPool : CustomRelicPoolModel
 {
-    /// <summary>
-    /// Placeholder relic pool for the Seabourne character.  When the real
-    /// Slay the Spire 2 API is present, inherit from RelicPoolModel and
-    /// populate it with Seabourne-specific relics.  Here we derive from
-    /// the stub RelicPoolModel and leave it empty.
-    /// </summary>
-    public class SeabourneRelicPool : RelicPoolModel
-    {
-    }
+    public override Color LabOutlineColor => new(0.0f, 0.5f, 0.8f);
 }
