@@ -1,0 +1,205 @@
+name: Temporary BaseLib step 4 migration
+
+on:
+  push:
+    branches:
+      - baselib-api-migration-steps-1-3
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Migrate tags and dynamic vars
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('SEABOURNECode/Cards')
+          card_files = [p for p in root.rglob('*.cs') if p.name != 'SeabourneCard.cs']
+
+          changed = []
+          keyword_cards = 0
+          tag_cards = 0
+          var_cards = 0
+
+          number = r'-?\d+(?:\.\d+)?'
+
+          def add_using(text: str, namespace: str) -> str:
+              line = f'using {namespace};'
+              if line in text:
+                  return text
+              lines = text.splitlines()
+              insert_at = 0
+              while insert_at < len(lines) and lines[insert_at].startswith('using '):
+                  insert_at += 1
+              lines.insert(insert_at, line)
+              return '\n'.join(lines) + ('\n' if text.endswith('\n') else '')
+
+          def convert_var_factories(expr: str) -> str:
+              expr = re.sub(
+                  rf'DamageVar\.ForDamage\(\s*({number})\s*,\s*({number})\s*\)',
+                  r'new DamageVar(\1, ValueProp.Move).WithUpgrade(\2)',
+                  expr,
+              )
+              expr = re.sub(
+                  rf'BlockVar\.ForBlock\(\s*({number})\s*,\s*({number})\s*\)',
+                  r'new BlockVar(\1, ValueProp.Move).WithUpgrade(\2)',
+                  expr,
+              )
+              expr = re.sub(
+                  rf'EnergyVar\.ForEnergy\(\s*({number})\s*,\s*({number})\s*\)',
+                  r'new EnergyVar(\1).WithUpgrade(\2)',
+                  expr,
+              )
+              expr = re.sub(
+                  rf'CastVar\.ForCast\(\s*({number})\s*,\s*({number})\s*\)',
+                  r'new CastVar(\1).WithUpgrade(\2)',
+                  expr,
+              )
+              expr = re.sub(
+                  rf'ReelVar\.ForReel\(\s*({number})\s*,\s*({number})\s*\)',
+                  r'new ReelVar(\1).WithUpgrade(\2)',
+                  expr,
+              )
+              expr = re.sub(
+                  rf'CannonballVar\.ForCannonball\(\s*({number})\s*,\s*({number})\s*\)',
+                  r'new CannonballVar(\1).WithUpgrade(\2)',
+                  expr,
+              )
+              return expr
+
+          tag_pattern = re.compile(
+              r'(?m)^(?P<indent>\s*)public override CardAspectSequence\? CanonicalTags => '
+              r'CardTagsProvider\.Instance\.(?P<body>Empty|From\((?P<args>[^;]*)\));\s*$'
+          )
+          vars_empty_pattern = re.compile(
+              r'(?m)^(?P<indent>\s*)public override CardVarSequence\? CanonicalVars => '
+              r'CardVarsProvider\.Instance\.Empty;\s*$'
+          )
+          vars_from_pattern = re.compile(
+              r'(?ms)^(?P<indent>\s*)public override CardVarSequence\? CanonicalVars => '
+              r'CardVarsProvider\.Instance\.From\(\s*(?P<args>.*?)\s*\);\s*$'
+          )
+
+          for path in card_files:
+              original = path.read_text(encoding='utf-8-sig')
+              text = original
+
+              tag_match = tag_pattern.search(text)
+              if not tag_match:
+                  raise SystemExit(f'Could not locate CanonicalTags in {path}')
+
+              indent = tag_match.group('indent')
+              body = tag_match.group('body')
+              args = tag_match.group('args')
+              tags = []
+              keywords = []
+
+              if body != 'Empty':
+                  for raw in [x.strip() for x in args.split(',') if x.strip()]:
+                      if raw == 'CardTag.Exhaust':
+                          keywords.append('CardKeyword.Exhaust')
+                      elif raw == 'CardTag.Innate':
+                          keywords.append('CardKeyword.Innate')
+                      elif raw.startswith('CardTag.'):
+                          tags.append(raw)
+                      elif raw.startswith('SeabourneTag.'):
+                          tags.append(raw.replace('SeabourneTag.', 'SeabourneTags.', 1))
+                      elif raw.startswith('SeabourneTags.'):
+                          tags.append(raw)
+                      else:
+                          raise SystemExit(f'Unknown old tag expression in {path}: {raw}')
+
+              tag_expr = '[]' if not tags else '[' + ', '.join(tags) + ']'
+              replacement = f'{indent}protected override HashSet<CardTag> CanonicalTags => {tag_expr};'
+              if keywords:
+                  replacement += '\n' + indent + 'public override IEnumerable<CardKeyword> CanonicalKeywords => [' + ', '.join(keywords) + '];'
+                  keyword_cards += 1
+              if tags:
+                  tag_cards += 1
+              text = text[:tag_match.start()] + replacement + text[tag_match.end():]
+
+              if vars_empty_pattern.search(text):
+                  text = vars_empty_pattern.sub(
+                      lambda m: f"{m.group('indent')}protected override IEnumerable<DynamicVar> CanonicalVars => [];",
+                      text,
+                      count=1,
+                  )
+                  var_cards += 1
+              else:
+                  var_match = vars_from_pattern.search(text)
+                  if not var_match:
+                      raise SystemExit(f'Could not locate CanonicalVars in {path}')
+                  vindent = var_match.group('indent')
+                  expr = convert_var_factories(var_match.group('args').strip())
+                  replacement = f'{vindent}protected override IEnumerable<DynamicVar> CanonicalVars => [\n{expr}\n{vindent}];'
+                  text = text[:var_match.start()] + replacement + text[var_match.end():]
+                  var_cards += 1
+
+              if '.WithUpgrade(' in text:
+                  text = add_using(text, 'BaseLib.Extensions')
+              if 'new DamageVar(' in text or 'new BlockVar(' in text:
+                  text = add_using(text, 'MegaCrit.Sts2.Core.ValueProps')
+              if any(name in text for name in ('new CastVar(', 'new ReelVar(', 'new CannonballVar(')):
+                  text = add_using(text, 'SEABOURNE.SEABOURNECode.DynamicVars')
+              if 'SeabourneTags.' in text:
+                  text = add_using(text, 'SEABOURNE.SEABOURNECode.Enums')
+
+              forbidden = [
+                  'CardAspectSequence',
+                  'CardVarSequence',
+                  'CardTagsProvider',
+                  'CardVarsProvider',
+                  'CardTag.Exhaust',
+                  'CardTag.Innate',
+                  'SeabourneTag.',
+              ]
+              leftovers = [item for item in forbidden if item in text]
+              factory_leftovers = re.findall(r'\b\w+Var\.For\w+\s*\(', text)
+              if leftovers or factory_leftovers:
+                  raise SystemExit(f'Unmigrated API in {path}: {leftovers + factory_leftovers}')
+
+              if 'protected override HashSet<CardTag> CanonicalTags' not in text:
+                  raise SystemExit(f'Missing migrated CanonicalTags in {path}')
+              if 'protected override IEnumerable<DynamicVar> CanonicalVars' not in text:
+                  raise SystemExit(f'Missing migrated CanonicalVars in {path}')
+
+              if text != original:
+                  path.write_text(text, encoding='utf-8')
+                  changed.append(path.as_posix())
+
+          workflow = Path('.github/workflows/migrate-baselib-step-4.yml')
+          if workflow.exists():
+              workflow.unlink()
+
+          print(f'Migrated {len(changed)} card files')
+          print(f'CanonicalVars migrated: {var_cards}')
+          print(f'Cards retaining real/custom tags: {tag_cards}')
+          print(f'Cards moved to CanonicalKeywords: {keyword_cards}')
+          for item in changed:
+              print(item)
+          PY
+
+          git diff --check
+
+      - name: Commit migration
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Migrate card tags and dynamic vars to current BaseLib API"
+          git push origin HEAD:${GITHUB_REF_NAME}
