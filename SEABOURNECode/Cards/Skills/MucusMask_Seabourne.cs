@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Mucus Mask";
         public override string Description => "Gain Slippery this turn; this card loses Slippery permanently.";
         public override string PortraitPath => "SEABOURNE/Images/MucusMask";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply Slippery stacks to player (1 base, 2 upgraded) for this turn

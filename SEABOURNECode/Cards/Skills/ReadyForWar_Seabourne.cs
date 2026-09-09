@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using BaseLib.Extensions;
+using SEABOURNE.SEABOURNECode.DynamicVars;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
@@ -21,11 +23,10 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Ready for War";
         public override string Description => "Cast and create Spiny Cannonballs.";
         public override string PortraitPath => "SEABOURNE/Images/ReadyForWar";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.From(
-            CastVar.ForCast(3, 0)
-        );
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [
+new CastVar(3).WithUpgrade(0)
+        ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply CastVar stacks of Cast and create 1 Spiny Cannonball (2 when upgraded) in the player's hand

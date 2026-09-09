@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Liquid Mind";
         public override string Description => "Gain Slippery and reduce this card's cost.";
         public override string PortraitPath => "SEABOURNE/Images/LiquidMind";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: grant 2 Slippery and reduce this card's cost by 1 (down to a minimum of 0)

@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Sorcerer Form";
         public override string Description => "All cards gain Imbued 1. Ethereal.";
         public override string PortraitPath => "SEABOURNE/Images/SorcererForm";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Apply a power that gives all cards Imbued 1. This card should also gain the Ethereal keyword when appropriate.

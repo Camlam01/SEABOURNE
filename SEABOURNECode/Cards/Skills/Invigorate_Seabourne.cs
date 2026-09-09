@@ -21,9 +21,9 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Invigorate";
         public override string Description => "Recharge your gem treasures. Exhaust.";
         public override string PortraitPath => "SEABOURNE/Images/Invigorate";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.From(CardTag.Exhaust);
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: recharge all gem slots so they are ready for the next enhancement

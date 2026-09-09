@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Barbed Hook";
         public override string Description => "Gain Strength this turn equal to the number of cards reeled. Wet.";
         public override string PortraitPath => "SEABOURNE/Images/BarbedHook";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: for each card reeled this turn, grant the player temporary strength and apply Wet to this card

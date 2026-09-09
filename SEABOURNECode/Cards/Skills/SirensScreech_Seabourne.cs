@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Siren's Screech";
         public override string Description => "Apply Trance to an enemy. Wet.";
         public override string PortraitPath => "SEABOURNE/Images/SirensScreech";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply Trance (3 base, 4 upgraded) to the targeted enemy and apply Wet to this card

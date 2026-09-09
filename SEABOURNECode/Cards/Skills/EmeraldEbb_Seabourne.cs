@@ -21,9 +21,9 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Emerald Ebb";
         public override string Description => "Acquire an Emerald and gain Waterwall. Exhaust.";
         public override string PortraitPath => "SEABOURNE/Images/EmeraldEbb";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.From(CardTag.Exhaust);
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: acquire Emerald gem and apply Waterwall stacks (base 7, upgrade 9)

@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Empower";
         public override string Description => "Apply Trance but give the enemy Strength.";
         public override string PortraitPath => "SEABOURNE/Images/Empower";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply 5 (6 when upgraded) Trance to the target and give it 3 Strength

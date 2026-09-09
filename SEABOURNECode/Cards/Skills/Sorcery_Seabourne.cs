@@ -21,9 +21,9 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Sorcery";
         public override string Description => "Add Imbued to a card in your hand. Exhaust.";
         public override string PortraitPath => "SEABOURNE/Images/Sorcery";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.From(CardTag.Exhaust);
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: select a card in hand and apply Imbued 1 to it

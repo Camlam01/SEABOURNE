@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Flawless Stone";
         public override string Description => "Gain a Diamond. Diamonds can apply Wet to any card.";
         public override string PortraitPath => "SEABOURNE/Images/FlawlessStone";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Acquire a Diamond gem and modify Diamonds so they apply Wet to any card when used.

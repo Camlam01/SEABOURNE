@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using BaseLib.Extensions;
+using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
@@ -21,11 +23,10 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
         public override string Name => "Swashbuckling Strike";
         public override string Description => "Deal damage and apply Wet.";
         public override string PortraitPath => "SEABOURNE/Images/SwashbucklingStrike";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.From(
-            DamageVar.ForDamage(15, 5)
-        );
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [
+new DamageVar(15, ValueProp.Move).WithUpgrade(5)
+        ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: deal DamageVar damage to the target and apply Wet (1 stack)

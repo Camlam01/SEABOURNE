@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Enchanted Rod";
         public override string Description => "The first card reeled each turn is imbued without using gem charges.";
         public override string PortraitPath => "SEABOURNE/Images/EnchantedRod";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Apply a power that imbues the first (or first two when upgraded) reeled card(s) without consuming gem charges.

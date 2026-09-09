@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Ancient Curse";
         public override string Description => "Apply Vulnerable and Weak to all enemies. Imbued.";
         public override string PortraitPath => "SEABOURNE/Images/AncientCurse";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply 1 Vulnerable and 1 Weak to all enemies (2 of each when upgraded) and apply Imbued stacks to this card

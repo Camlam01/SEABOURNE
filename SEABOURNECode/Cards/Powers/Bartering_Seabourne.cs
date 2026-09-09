@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Bartering";
         public override string Description => "Remove all gems, gain 15 gold for each gem removed.";
         public override string PortraitPath => "SEABOURNE/Images/Bartering";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Remove all gems from the player and grant 15 gold per gem removed (25 gold when upgraded).

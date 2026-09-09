@@ -21,9 +21,9 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Oceanic Opal";
         public override string Description => "Acquire an Opal and reel the hooked card. Exhaust.";
         public override string PortraitPath => "SEABOURNE/Images/OceanicOpal";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.From(CardTag.Exhaust);
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: acquire Opal gem and reel cards according to current cast

@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Vault";
         public override string Description => "Increase your gem slot capacity.";
         public override string PortraitPath => "SEABOURNE/Images/Vault";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply a power that grants 2 additional gem slots (3 when upgraded)

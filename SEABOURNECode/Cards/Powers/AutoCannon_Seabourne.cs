@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Auto Cannon";
         public override string Description => "Fire the cannon at the start of your turn. Wet.";
         public override string PortraitPath => "SEABOURNE/Images/AutoCannon";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply a power that automatically fires the cannon at the start of each turn and mark this card as Wet

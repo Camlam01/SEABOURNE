@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using BaseLib.Extensions;
+using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
@@ -21,11 +23,10 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
         public override string Name => "Line Whip";
         public override string Description => "Reel, deal damage and apply Vulnerable to all enemies.";
         public override string PortraitPath => "SEABOURNE/Images/LineWhip";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.From(
-            DamageVar.ForDamage(5, 2)
-        );
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [
+new DamageVar(5, ValueProp.Move).WithUpgrade(2)
+        ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: reel cards, deal DamageVar damage to all enemies and apply Vulnerable (1 base, 2 upgraded)

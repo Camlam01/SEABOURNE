@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using BaseLib.Extensions;
+using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
@@ -23,12 +25,11 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
         public override string Name => "Tidepool";
         public override string Description => "Deal damage, gain Waterwall, apply Weak and Vulnerable to all enemies and add a copy to your discard pile. Wet.";
         public override string PortraitPath => "SEABOURNE/Images/Tidepool";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.From(
-            DamageVar.ForDamage(5, 1),
-            BlockVar.ForBlock(5, 1)
-        );
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [
+new DamageVar(5, ValueProp.Move).WithUpgrade(1),
+            new BlockVar(5, ValueProp.Move).WithUpgrade(1)
+        ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Deal DamageVar damage to all enemies, gain BlockVar Waterwall stacks, apply 1 Weak and 1 Vulnerable to all enemies,

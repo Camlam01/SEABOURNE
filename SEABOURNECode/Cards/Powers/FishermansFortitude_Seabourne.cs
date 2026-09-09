@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using BaseLib.Extensions;
+using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
@@ -21,11 +23,10 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Fisherman's Fortitude";
         public override string Description => "Gain block when you cast.";
         public override string PortraitPath => "SEABOURNE/Images/FishermansFortitude";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.From(
-            BlockVar.ForBlock(2, 1)
-        );
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [
+new BlockVar(2, ValueProp.Move).WithUpgrade(1)
+        ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply a power that grants BlockVar block whenever the player gains Cast

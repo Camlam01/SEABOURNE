@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
         public override string Name => "Hookshot";
         public override string Description => "Fire the cannon and reload all fired cannonballs.";
         public override string PortraitPath => "SEABOURNE/Images/Hookshot";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Fire the cannon at the target and then reload all previously fired cannonballs into the cannon.

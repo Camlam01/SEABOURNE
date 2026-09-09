@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
         public override string Name => "Rod Strangle";
         public override string Description => "Deal damage equal to Cast to all enemies and reel.";
         public override string PortraitPath => "SEABOURNE/Images/RodStrangle";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: calculate damage equal to current Cast stacks and deal it to all enemies then reel cards

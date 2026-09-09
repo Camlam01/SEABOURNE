@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
         public override string Name => "Fire Cannon";
         public override string Description => "Fire the cannon.";
         public override string PortraitPath => "SEABOURNE/Images/FireCannon";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: implement firing the cannon; this should trigger the cannon's damage effect.

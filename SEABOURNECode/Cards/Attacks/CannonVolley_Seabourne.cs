@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
         public override string Name => "Cannon Volley";
         public override string Description => "Fire the cannon; each consecutive cannonball deals increased damage.";
         public override string PortraitPath => "SEABOURNE/Images/CannonVolley";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: fire the cannon; implement ramping damage (each cannonball deals 20% more damage than the previous)

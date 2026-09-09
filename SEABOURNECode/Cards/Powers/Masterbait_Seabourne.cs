@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Masterbait";
         public override string Description => "Whenever you cast, gain an additional Cast.";
         public override string PortraitPath => "SEABOURNE/Images/Masterbait";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply a power that causes the player to gain an additional Cast whenever they gain Cast

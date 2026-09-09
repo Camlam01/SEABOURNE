@@ -21,9 +21,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
         public override string Name => "Fish";
         public override string Description => "Cast 1. Reel.";
         public override string PortraitPath => "SEABOURNE/Images/Fish";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply one stack of Cast and then reel cards according to cast count

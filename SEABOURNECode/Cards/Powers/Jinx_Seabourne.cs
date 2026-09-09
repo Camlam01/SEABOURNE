@@ -22,9 +22,8 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Jinx";
         public override string Description => "When you apply buffs or debuffs, apply 50% more stacks.";
         public override string PortraitPath => "SEABOURNE/Images/Jinx";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Apply a power that multiplies the stacks of buffs or debuffs you apply by 1.5 (or 1.75 when upgraded).

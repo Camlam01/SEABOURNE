@@ -21,9 +21,9 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
         public override string Name => "Stock Up";
         public override string Description => "Create Cannonball cards. Exhaust.";
         public override string PortraitPath => "SEABOURNE/Images/StockUp";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.From(CardTag.Exhaust);
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: create 2 Cannonball cards (3 when upgraded) and add them to the player's hand

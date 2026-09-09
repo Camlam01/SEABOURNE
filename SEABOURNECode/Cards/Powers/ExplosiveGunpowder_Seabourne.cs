@@ -21,9 +21,9 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
         public override string Name => "Explosive Gunpowder";
         public override string Description => "Cannonballs deal double damage. Exhaust.";
         public override string PortraitPath => "SEABOURNE/Images/ExplosiveGunpowder";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.From(CardTag.Exhaust);
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
+        protected override HashSet<CardTag> CanonicalTags => [];
+        public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply a power that doubles cannonball damage and ensure this card exhausts
