@@ -16,26 +16,21 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that causes the first card reeled each turn to become imbued without consuming gem charges.
     /// When upgraded the effect applies to the first two cards reeled each turn.
     /// </summary>
-    public class EnchantedRod_Seabourne : SeabourneCard
+    public class EnchantedRod_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:EnchantedRod";
         public override string Name => "Enchanted Rod";
         public override string Description => "The first card reeled each turn is imbued without using gem charges.";
-        public override EnergyCost? Cost => EnergyCost.From(1);
-        public override CardType Type => CardType.Power;
-        public override CardRarity Rarity => CardRarity.Rare;
-        public override CardTarget Target => CardTarget.Self;
         public override string PortraitPath => "SEABOURNE/Images/EnchantedRod";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
-        public override async Task OnPlay(CardPlayState state)
+        protected override HashSet<CardTag> CanonicalTags => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: Apply a power that imbues the first (or first two when upgraded) reeled card(s) without consuming gem charges.
             await Task.CompletedTask;
         }
 
-        public override void OnUpgrade()
+        protected override void OnUpgrade()
         {
             base.OnUpgrade();
             // Upgrade effect: imbue the first two cards reeled each turn. No cost change.

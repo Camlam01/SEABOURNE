@@ -15,26 +15,22 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that recharges all of the player's gems. It exhausts when played.
     /// </summary>
-    public class Invigorate_Seabourne : SeabourneCard
+    public class Invigorate_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:Invigorate";
         public override string Name => "Invigorate";
         public override string Description => "Recharge your gem treasures. Exhaust.";
-        public override EnergyCost? Cost => EnergyCost.From(1);
-        public override CardType Type => CardType.Skill;
-        public override CardRarity Rarity => CardRarity.Common;
-        public override CardTarget Target => CardTarget.Self;
         public override string PortraitPath => "SEABOURNE/Images/Invigorate";
-        public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.From(CardTag.Exhaust);
-        public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.Empty;
-
-        public override async Task OnPlay(CardPlayState state)
+        protected override HashSet<CardTag> CanonicalTags => [];
+        public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [];
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: recharge all gem slots so they are ready for the next enhancement
             await Task.CompletedTask;
         }
 
-        public override void OnUpgrade()
+        protected override void OnUpgrade()
         {
             base.OnUpgrade();
             // Reduce cost from 1 to 0
