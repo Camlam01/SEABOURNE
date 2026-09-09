@@ -1,15 +1,19 @@
-using MegaCrit.Sts2.Core.Models;
+using BaseLib.Abstracts;
+using Godot;
 
-namespace SEABOURNE.SEABOURNECode.Pools
+namespace SEABOURNE.SEABOURNECode.Pools;
+
+/// <summary>
+/// Card pool for the Seabourne character. Custom Seabourne cards are added
+/// to this pool through BaseLib's Pool attribute on the shared card base.
+/// </summary>
+public class SeabourneCardPool : CustomCardPoolModel
 {
-    /// <summary>
-    /// Placeholder card pool for the Seabourne character.  When the real
-    /// Slay the Spire 2 API is available, this class should derive from
-    /// CardPoolModel and generate all cards for the Seabourne card pool.
-    /// In this stub implementation it derives from the stub CardPoolModel
-    /// defined in StubClasses.cs and contains no logic.
-    /// </summary>
-    public class SeabourneCardPool : CardPoolModel
-    {
-    }
+    public override string Title => "SEABOURNE";
+
+    // Ocean-themed colour used for card frames and deck-entry card icons.
+    public override Color ShaderColor => new(0.0f, 0.5f, 0.8f);
+    public override Color DeckEntryCardColor => new(0.0f, 0.5f, 0.8f);
+
+    public override bool IsColorless => false;
 }
