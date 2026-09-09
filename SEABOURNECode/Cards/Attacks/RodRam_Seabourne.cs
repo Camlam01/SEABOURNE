@@ -15,15 +15,11 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that grants Cast and deals damage.
     /// </summary>
-    public class RodRam_Seabourne : SeabourneCard
+    public class RodRam_Seabourne : SeabourneCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:RodRam";
         public override string Name => "Rod Ram";
         public override string Description => "Cast and deal damage.";
-        public override EnergyCost? Cost => EnergyCost.From(0);
-        public override CardType Type => CardType.Attack;
-        public override CardRarity Rarity => CardRarity.Common;
-        public override CardTarget Target => CardTarget.Enemy;
         public override string PortraitPath => "SEABOURNE/Images/RodRam";
         public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
         public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.From(
@@ -31,13 +27,13 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
             DamageVar.ForDamage(5, 2)
         );
 
-        public override async Task OnPlay(CardPlayState state)
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply CastVar amount of Cast then deal DamageVar damage to the target
             await Task.CompletedTask;
         }
 
-        public override void OnUpgrade()
+        protected override void OnUpgrade()
         {
             base.OnUpgrade();
             // Damage increases automatically; Cast stays constant

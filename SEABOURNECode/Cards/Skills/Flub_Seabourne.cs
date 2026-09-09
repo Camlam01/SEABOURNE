@@ -15,15 +15,11 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that grants Cast and block. Cast causes the hooked card to move deeper into the discard pile.
     /// </summary>
-    public class Flub_Seabourne : SeabourneCard
+    public class Flub_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:Flub";
         public override string Name => "Flub";
         public override string Description => "Gain Cast and Block.";
-        public override EnergyCost? Cost => EnergyCost.From(1);
-        public override CardType Type => CardType.Skill;
-        public override CardRarity Rarity => CardRarity.Common;
-        public override CardTarget Target => CardTarget.Self;
         public override string PortraitPath => "SEABOURNE/Images/Flub";
         public override CardAspectSequence? CanonicalTags => CardTagsProvider.Instance.Empty;
         public override CardVarSequence? CanonicalVars => CardVarsProvider.Instance.From(
@@ -31,7 +27,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
             BlockVar.ForBlock(7, 1)
         );
 
-        public override async Task OnPlay(CardPlayState state)
+        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             // TODO: apply Cast and gain block based on dynamic variables
             // await PowerCmd.Apply<CastPower>(state.Owner, GetVar(CastVar)).Run();
@@ -39,7 +35,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
             await Task.CompletedTask;
         }
 
-        public override void OnUpgrade()
+        protected override void OnUpgrade()
         {
             base.OnUpgrade();
             // Dynamic variables will upgrade automatically.
