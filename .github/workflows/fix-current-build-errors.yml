@@ -1,0 +1,142 @@
+name: Temporary current build error migration
+
+on:
+  push:
+    branches: [baselib-api-migration-steps-1-3]
+    paths: ['.github/workflows/fix-current-build-errors.yml']
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fix current API compile blockers
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('SEABOURNECode/Cards')
+          card_files = [p for p in root.rglob('*.cs') if p.name != 'SeabourneCard.cs']
+          changed = []
+
+          string_lit = r'"(?:\\.|[^"\\])*"'
+          class_re = re.compile(r'(?m)^(\s*public\s+(?:sealed\s+)?class\s+\w+)(\s*:\s*SeabourneCard\()')
+          loc_re = re.compile(
+              rf'(?m)^(?P<i>\s*)public override string Name => (?P<n>{string_lit});\s*\n'
+              rf'(?P=i)public override string Description => (?P<d>{string_lit});\s*$'
+          )
+          discard_re = re.compile(r'(?ms)^\s*public override bool ShouldMoveToDiscard\(\) => false;\s*')
+
+          for path in card_files:
+              original = path.read_text(encoding='utf-8-sig')
+              text = original
+
+              text, nclass = class_re.subn(r'\1()\2', text, count=1)
+              if nclass != 1:
+                  raise SystemExit(f'Expected one SeabourneCard-derived class declaration in {path}, got {nclass}')
+
+              def loc_replace(m):
+                  i, n, d = m.group('i'), m.group('n'), m.group('d')
+                  return f'{i}public override List<(string, string)>? Localization => new CardLoc({n}, {d});'
+
+              text, nloc = loc_re.subn(loc_replace, text, count=1)
+              if nloc != 1:
+                  raise SystemExit(f'Expected adjacent Name/Description localization pair in {path}, got {nloc}')
+
+              text = discard_re.sub('\n        // TODO: implement cannon/load-zone card movement using the current STS2 card-play flow.\n', text)
+
+              # Remove duplicate using directives while preserving first occurrence/order.
+              lines = text.splitlines()
+              seen = set()
+              out = []
+              for line in lines:
+                  if line.startswith('using '):
+                      if line in seen:
+                          continue
+                      seen.add(line)
+                  out.append(line)
+              text = '\n'.join(out) + ('\n' if original.endswith('\n') else '')
+
+              if text != original:
+                  path.write_text(text, encoding='utf-8')
+                  changed.append(path.as_posix())
+
+          # [Pool] now lives in BaseLib.Utils, not BaseLib.Extensions.
+          p = Path('SEABOURNECode/Cards/SeabourneCard.cs')
+          text = p.read_text(encoding='utf-8-sig')
+          if 'using BaseLib.Utils;' not in text:
+              text = text.replace('using BaseLib.Extensions;\n', 'using BaseLib.Extensions;\nusing BaseLib.Utils;\n')
+          p.write_text(text, encoding='utf-8')
+
+          # Replace obsolete wrapper-returning helpers with current collection types.
+          p = Path('SEABOURNECode/Utils.cs')
+          p.write_text('''using MegaCrit.Sts2.Core.Entities.Cards;\nusing MegaCrit.Sts2.Core.Localization.DynamicVars;\n\nnamespace SEABOURNE.SEABOURNECode;\n\npublic static class Utils\n{\n    public static string MakeId(string simpleName) => $"Seabourne:{simpleName}";\n\n    public static HashSet<CardTag> Tags(params CardTag[] tags) => [.. tags];\n\n    public static IEnumerable<DynamicVar> Vars(params DynamicVar[] vars) => vars;\n}\n''', encoding='utf-8')
+
+          # CardModel itself is the mutable runtime card object in current STS2.
+          p = Path('SEABOURNECode/Extensions/SeabourneCardRuntime.cs')
+          p.write_text('''using MegaCrit.Sts2.Core.Models;\nusing SEABOURNE.SEABOURNECode.Cards;\n\nnamespace SEABOURNE.SEABOURNECode.Extensions;\n\npublic static class SeabourneCardRuntime\n{\n    public static bool IsSeabourneCard(this CardModel card) => card is SeabourneCard;\n\n    public static bool ShouldLoadIntoCannon(this CardModel card)\n    {\n        // TODO: implement cannon loading against current card-play/pile movement APIs.\n        return false;\n    }\n}\n''', encoding='utf-8')
+
+          # Match the current PowerModel hook signature used by base-game powers.
+          p = Path('SEABOURNECode/Powers/RubyGemPower.cs')
+          text = p.read_text(encoding='utf-8-sig')
+          old = 'public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)'
+          new = 'public override decimal ModifyDamageMultiplicative(Creature target, decimal amount, ValueProp props, Creature dealer, CardModel cardSource)'
+          if old not in text:
+              raise SystemExit('RubyGemPower old damage hook signature not found')
+          p.write_text(text.replace(old, new), encoding='utf-8')
+
+          # Make the dormant starter relic a valid current BaseLib model so it no longer blocks compilation.
+          p = Path('SEABOURNECode/Relics/SeabourneStarterRelic.cs')
+          p.write_text('''using BaseLib.Abstracts;\nusing BaseLib.Utils;\nusing MegaCrit.Sts2.Core.Entities.Relics;\nusing SEABOURNE.SEABOURNECode.Pools;\n\nnamespace SEABOURNE.SEABOURNECode.Relics;\n\n[Pool(typeof(SeabourneRelicPool))]\npublic class SeabourneStarterRelic() : CustomRelicModel\n{\n    public override RelicRarity Rarity => RelicRarity.Starter;\n    public override List<(string, string)>? Localization =>\n        new RelicLoc("Seabourne Starter Relic", "At the start of each turn, gain 1 Cast.", "A placeholder relic implementation while Cast hooks are migrated.");\n}\n''', encoding='utf-8')
+
+          workflow = Path('.github/workflows/fix-current-build-errors.yml')
+          if workflow.exists():
+              workflow.unlink()
+
+          # Static guards for this error wave.
+          forbidden = [
+              'public override string Name =>',
+              'public override string Description =>',
+              'CardAspectSequence', 'CardVarSequence', 'IDynamicVar',
+              'CardTagsProvider', 'CardVarsProvider', 'CardRuntime',
+              'ShouldMoveToDiscard()'
+          ]
+          all_text = '\n'.join(p.read_text(encoding='utf-8-sig') for p in Path('SEABOURNECode').rglob('*.cs'))
+          leftovers = [x for x in forbidden if x in all_text]
+          if leftovers:
+              raise SystemExit(f'Known stale API leftovers remain: {leftovers}')
+
+          bad_classes = []
+          for p in card_files:
+              t = p.read_text(encoding='utf-8-sig')
+              if re.search(r'public\s+(?:sealed\s+)?class\s+\w+\s*:\s*SeabourneCard\(', t):
+                  bad_classes.append(str(p))
+          if bad_classes:
+              raise SystemExit(f'Missing empty primary constructors: {bad_classes}')
+
+          print(f'Updated {len(changed)} card files')
+          print('Migrated card localization, constructors, Pool namespace, Utils, CardRuntime helper, Ruby hook, and starter relic')
+          PY
+
+          git diff --check
+
+      - name: Commit migration
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Fix current BaseLib compile blockers"
+          git push origin HEAD:${GITHUB_REF_NAME}
