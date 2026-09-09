@@ -1,0 +1,174 @@
+name: Temporary BaseLib API migration
+
+on:
+  push:
+    branches:
+      - baselib-api-migration-steps-1-3
+
+permissions:
+  contents: write
+
+jobs:
+  migrate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Migrate card API surface
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('SEABOURNECode/Cards')
+          stub = Path('SEABOURNECode/Stubs/StubClasses.cs')
+          duplicate_base = root / 'SeabourneCardModel.cs'
+
+          if stub.exists():
+              stub.unlink()
+          if duplicate_base.exists():
+              duplicate_base.unlink()
+
+          # Replace the old stub-oriented base class with the current BaseLib pattern.
+          (root / 'SeabourneCard.cs').write_text('''using BaseLib.Abstracts;
+          using BaseLib.Extensions;
+          using MegaCrit.Sts2.Core.Entities.Cards;
+          using SEABOURNE.SEABOURNECode.Pools;
+
+          namespace SEABOURNE.SEABOURNECode.Cards
+          {
+              /// <summary>
+              /// Base class for all Seabourne cards using the current BaseLib card API.
+              /// Individual cards supply cost, type, rarity and target through their
+              /// primary constructor and are automatically associated with the
+              /// Seabourne card pool.
+              /// </summary>
+              [Pool(typeof(SeabourneCardPool))]
+              public abstract class SeabourneCard(int cost, CardType type, CardRarity rarity, TargetType target)
+                  : CustomCardModel(cost, type, rarity, target)
+              {
+              }
+          }
+          '''.replace('          ', ''), encoding='utf-8')
+
+          target_map = {
+              'None': 'None',
+              'Self': 'Self',
+              'Enemy': 'AnyEnemy',
+              'AnyEnemy': 'AnyEnemy',
+              'AllEnemies': 'AllEnemies',
+              'RandomEnemy': 'RandomEnemy',
+              'AnyPlayer': 'AnyPlayer',
+              'AnyAlly': 'AnyAlly',
+              'AllAllies': 'AllAllies',
+          }
+
+          migrated = []
+          onplay_count = 0
+          errors = []
+
+          card_files = [
+              p for p in root.rglob('*.cs')
+              if p.name not in {'SeabourneCard.cs', 'SeabourneCardModel.cs'}
+          ]
+
+          for path in card_files:
+              text = path.read_text(encoding='utf-8-sig')
+              if ': SeabourneCard' not in text:
+                  continue
+
+              cost_fixed = re.search(r'public\s+override\s+EnergyCost\?\s+Cost\s*=>\s*EnergyCost\.From\((-?\d+)\)\s*;', text)
+              cost_x = re.search(r'public\s+override\s+EnergyCost\?\s+Cost\s*=>\s*EnergyCost\.XCost\(\)\s*;', text)
+              type_match = re.search(r'public\s+override\s+CardType\s+Type\s*=>\s*CardType\.(\w+)\s*;', text)
+              rarity_match = re.search(r'public\s+override\s+CardRarity\s+Rarity\s*=>\s*CardRarity\.(\w+)\s*;', text)
+              target_match = re.search(r'public\s+override\s+(?:CardTarget|TargetType)\s+Target\s*=>\s*(?:CardTarget|TargetType)\.(\w+)\s*;', text)
+
+              missing = []
+              if not (cost_fixed or cost_x): missing.append('cost')
+              if not type_match: missing.append('type')
+              if not rarity_match: missing.append('rarity')
+              if not target_match: missing.append('target')
+              if missing:
+                  errors.append(f'{path}: missing {", ".join(missing)}')
+                  continue
+
+              cost = cost_fixed.group(1) if cost_fixed else 'int.MinValue'
+              card_type = type_match.group(1)
+              rarity = rarity_match.group(1)
+              if rarity == 'Starter':
+                  rarity = 'Basic'
+              old_target = target_match.group(1)
+              if old_target not in target_map:
+                  errors.append(f'{path}: unknown target {old_target}')
+                  continue
+              target = target_map[old_target]
+
+              class_pattern = r'(public\s+(?:sealed\s+)?class\s+\w+)\s*:\s*SeabourneCard(?!\s*\()'
+              if not re.search(class_pattern, text):
+                  errors.append(f'{path}: could not locate SeabourneCard base declaration')
+                  continue
+              text = re.sub(
+                  class_pattern,
+                  rf'\1 : SeabourneCard({cost}, CardType.{card_type}, CardRarity.{rarity}, TargetType.{target})',
+                  text,
+                  count=1,
+              )
+
+              # Remove the old stub-era metadata properties now supplied to the constructor.
+              text = re.sub(r'^\s*public\s+override\s+EnergyCost\?\s+Cost\s*=>.*?;\s*\n', '', text, flags=re.M)
+              text = re.sub(r'^\s*public\s+override\s+CardType\s+Type\s*=>.*?;\s*\n', '', text, flags=re.M)
+              text = re.sub(r'^\s*public\s+override\s+CardRarity\s+Rarity\s*=>.*?;\s*\n', '', text, flags=re.M)
+              text = re.sub(r'^\s*public\s+override\s+(?:CardTarget|TargetType)\s+Target\s*=>.*?;\s*\n', '', text, flags=re.M)
+
+              # Current STS2/BaseLib enums come from Entities.Cards.
+              text = re.sub(r'^using MegaCrit\.Sts2\.Core\.Models\.Cards\.Enums;\s*\n', '', text, flags=re.M)
+              if 'using MegaCrit.Sts2.Core.Entities.Cards;' not in text:
+                  text = 'using MegaCrit.Sts2.Core.Entities.Cards;\n' + text
+
+              # Current CardModel OnPlay API.
+              old_sig = r'public\s+override\s+async\s+Task\s+OnPlay\s*\(\s*CardPlayState\s+state\s*\)'
+              occurrences = len(re.findall(old_sig, text))
+              if occurrences:
+                  text = re.sub(
+                      old_sig,
+                      'protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)',
+                      text,
+                  )
+                  onplay_count += occurrences
+                  if 'using MegaCrit.Sts2.Core.GameActions.Multiplayer;' not in text:
+                      text = 'using MegaCrit.Sts2.Core.GameActions.Multiplayer;\n' + text
+
+              # OnUpgrade is protected in the current CardModel API.
+              text = re.sub(r'public\s+override\s+void\s+OnUpgrade\s*\(', 'protected override void OnUpgrade(', text)
+
+              path.write_text(text, encoding='utf-8')
+              migrated.append(path.as_posix())
+
+          if errors:
+              raise SystemExit('Migration aborted:\n' + '\n'.join(errors))
+
+          print(f'Migrated {len(migrated)} card files')
+          print(f'Replaced {onplay_count} OnPlay signatures')
+          for item in migrated:
+              print(item)
+
+          # This workflow is intentionally one-shot; remove it from the resulting branch.
+          Path('.github/workflows/migrate-baselib-steps-1-3.yml').unlink()
+          PY
+
+      - name: Commit migration
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git commit -m "Migrate cards to current BaseLib API"
+          git push origin HEAD:${GITHUB_REF_NAME}
