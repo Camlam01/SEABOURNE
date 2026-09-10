@@ -1,3 +1,4 @@
+using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 
 namespace SEABOURNE.SEABOURNECode.Relics
