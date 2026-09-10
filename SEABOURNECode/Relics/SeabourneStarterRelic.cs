@@ -3,13 +3,13 @@ using MegaCrit.Sts2.Core.Models;
 namespace SEABOURNE.SEABOURNECode.Relics
 {
     /// <summary>
-    /// Placeholder starter relic for the Seabourne character.  When the
-    /// Slay the Spire 2 API is available, inherit from RelicModel and
-    /// implement any behaviour this relic should provide.  This stub
-    /// implementation is empty and serves only to satisfy compile‑time
-    /// dependencies.
+    /// Temporary placeholder for the future Seabourne starter relic.
+    /// The character currently uses Burning Blood while the custom relic
+    /// behaviour is migrated. Defining the current required rarity keeps this
+    /// model compile-safe without prematurely registering unfinished content.
     /// </summary>
     public class SeabourneStarterRelic : RelicModel
     {
+        public override RelicRarity Rarity => RelicRarity.Starter;
     }
 }
