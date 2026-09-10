@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare X-cost skill that allows the player to imbue and discard cards from the draw pile.
     /// </summary>
-    public class Wash_Seabourne : SeabourneCard(int.MinValue, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class Wash_Seabourne() : SeabourneCard(int.MinValue, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Wash";
         public override string Name => "Wash";

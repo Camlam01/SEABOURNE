@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that applies Trance to an enemy at the cost of giving them Strength.
     /// </summary>
-    public class Empower_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class Empower_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Empower";
         public override string Name => "Empower";

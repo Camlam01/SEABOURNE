@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare skill that grants block and applies Wet.
     /// </summary>
-    public class SeaShield_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class SeaShield_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:SeaShield";
         public override string Name => "Sea Shield";

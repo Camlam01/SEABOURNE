@@ -9,14 +9,13 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
     using SEABOURNE.SEABOURNECode.Cards;
-    using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Powers
 {
     /// <summary>
     /// Uncommon power that causes the cannon to fire at the start of the player's turn. Applies Wet to the card.
     /// </summary>
-    public class AutoCannon_Seabourne : SeabourneCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class AutoCannon_Seabourne() : SeabourneCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:AutoCannon";
         public override string Name => "Auto Cannon";

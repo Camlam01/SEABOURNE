@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that converts Cast into Waterwall and then reels cards. Upgraded version costs less energy.
     /// </summary>
-    public class WaterBarrier_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class WaterBarrier_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:WaterBarrier";
         public override string Name => "Water Barrier";

@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Rare attack that deals damage, increases gem slot capacity and acquires a random gem.
     /// </summary>
-    public class BejeweledStrike_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+    public class BejeweledStrike_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:BejeweledStrike";
         public override string Name => "Bejeweled Strike";

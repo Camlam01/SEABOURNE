@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that allows the player to choose any gem at the start of their turn and acquire it. Upgrading
     /// reduces the energy cost, making it free to play.
     /// </summary>
-    public class XMarksTheSpot_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class XMarksTheSpot_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:XMarksTheSpot";
         public override string Name => "X Marks the Spot";

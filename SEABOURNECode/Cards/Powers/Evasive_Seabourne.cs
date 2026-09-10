@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that grants Slippery stacks but prevents the player from gaining block. Upgrades increase
     /// the number of Slippery stacks granted.
     /// </summary>
-    public class Evasive_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class Evasive_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Evasive";
         public override string Name => "Evasive";

@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
     /// <summary>
     /// Starter skill that grants Cast and immediately reels the hooked card into the player's hand.
     /// </summary>
-    public class Fish_Seabourne : SeabourneCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
+    public class Fish_Seabourne() : SeabourneCard(0, CardType.Skill, CardRarity.Basic, TargetType.Self)
     {
         public const string ID = "Seabourne:Fish";
         public override string Name => "Fish";

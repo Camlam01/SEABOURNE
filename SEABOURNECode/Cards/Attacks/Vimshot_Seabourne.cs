@@ -18,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon cannonball attack that loads into the cannon and deals damage plus extra energy when fired.
     /// </summary>
-    public class Vimshot_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class Vimshot_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Vimshot";
         public override string Name => "Vimshot";
@@ -33,10 +33,7 @@ new DamageVar(15, ValueProp.Move).WithUpgrade(0)
             // The card loads into the cannon; actual damage and energy gain are handled when the cannon fires.
             await Task.CompletedTask;
         }
-
-        public override bool ShouldMoveToDiscard() => false;
-
-        protected override void OnUpgrade()
+protected override void OnUpgrade()
         {
             base.OnUpgrade();
             // Extra energy on firing increases by 1; implement in cannon firing logic

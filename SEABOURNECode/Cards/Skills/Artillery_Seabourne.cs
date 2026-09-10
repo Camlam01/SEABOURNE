@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare skill that adds several random cannonball cards to the player's hand. Exhausts on play.
     /// </summary>
-    public class Artillery_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class Artillery_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Artillery";
         public override string Name => "Artillery";

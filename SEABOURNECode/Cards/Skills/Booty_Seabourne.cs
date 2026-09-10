@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare skill that grants block, increases gem slot capacity and acquires a gem.
     /// </summary>
-    public class Booty_Seabourne : SeabourneCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class Booty_Seabourne() : SeabourneCard(3, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Booty";
         public override string Name => "Booty";

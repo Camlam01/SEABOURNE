@@ -18,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack that deals damage, applies Cast and has the Imbued modifier.
     /// </summary>
-    public class RodWhip_Seabourne : SeabourneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class RodWhip_Seabourne() : SeabourneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:RodWhip";
         public override string Name => "Rod Whip";

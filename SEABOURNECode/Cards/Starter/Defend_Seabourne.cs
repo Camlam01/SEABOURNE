@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
     /// <summary>
     /// A basic defensive card for Seabourne. Grants block to the player.
     /// </summary>
-    public class Defend_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
+    public class Defend_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
     {
         public const string ID = "Seabourne:Defend";
         public override string Name => "Defend";

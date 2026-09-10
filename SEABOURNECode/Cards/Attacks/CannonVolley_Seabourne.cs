@@ -9,14 +9,13 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
     using SEABOURNE.SEABOURNECode.Cards;
-    using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Attacks
 {
     /// <summary>
     /// Uncommon attack that fires the cannon, increasing damage for each consecutive cannonball.
     /// </summary>
-    public class CannonVolley_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class CannonVolley_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:CannonVolley";
         public override string Name => "Cannon Volley";

@@ -18,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that applies Cast and deals splash damage to all enemies, applying Wet.
     /// </summary>
-    public class SplashingStrike_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
+    public class SplashingStrike_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:SplashingStrike";
         public override string Name => "Splashing Strike";

@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
     /// <summary>
     /// Starter attack which simply fires the Seabourne's cannon. When upgraded the cost is reduced by one.
     /// </summary>
-    public class FireCannon_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies)
+    public class FireCannon_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:FireCannon";
         public override string Name => "Fire Cannon";

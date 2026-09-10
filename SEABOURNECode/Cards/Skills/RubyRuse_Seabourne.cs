@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that acquires a Ruby gem and grants block. Exhausts when played.
     /// </summary>
-    public class RubyRuse_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class RubyRuse_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:RubyRuse";
         public override string Name => "Ruby Ruse";

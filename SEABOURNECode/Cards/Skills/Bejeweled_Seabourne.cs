@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare skill that grants the player all gems temporarily next turn, ignoring slot restrictions.
     /// </summary>
-    public class Bejeweled_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class Bejeweled_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Bejeweled";
         public override string Name => "Bejeweled";

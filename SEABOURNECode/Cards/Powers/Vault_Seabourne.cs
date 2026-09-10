@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that increases the player's gem slots.
     /// </summary>
-    public class Vault_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class Vault_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Vault";
         public override string Name => "Vault";

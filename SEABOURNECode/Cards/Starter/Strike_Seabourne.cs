@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
     /// <summary>
     /// A basic attack card for Seabourne. Deals moderate damage to a single enemy.
     /// </summary>
-    public class Strike_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+    public class Strike_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Strike";
         public override string Name => "Strike";

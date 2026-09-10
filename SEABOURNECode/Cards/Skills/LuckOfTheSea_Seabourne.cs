@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that grants random gems. Applies Wet. Upgraded version increases the number of gems.
     /// </summary>
-    public class LuckOfTheSea_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class LuckOfTheSea_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:LuckOfTheSea";
         public override string Name => "Luck of the Sea";

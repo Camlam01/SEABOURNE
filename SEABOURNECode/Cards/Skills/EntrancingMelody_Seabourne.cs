@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare skill that applies Trance multiple times to all enemies.
     /// </summary>
-    public class EntrancingMelody_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Rare, TargetType.AllEnemies)
+    public class EntrancingMelody_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Rare, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:EntrancingMelody";
         public override string Name => "Entrancing Melody";

@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack that deals damage to all enemies and applies Wet.
     /// </summary>
-    public class TentacleSlam_Seabourne : SeabourneCard(3, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+    public class TentacleSlam_Seabourne() : SeabourneCard(3, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:TentacleSlam";
         public override string Name => "Tentacle Slam";

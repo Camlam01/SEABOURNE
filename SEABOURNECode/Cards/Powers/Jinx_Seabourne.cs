@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that increases the number of stacks applied when you apply buffs or debuffs. Upgraded
     /// version increases the bonus percentage.
     /// </summary>
-    public class Jinx_Seabourne : SeabourneCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class Jinx_Seabourne() : SeabourneCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Jinx";
         public override string Name => "Jinx";

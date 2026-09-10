@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that removes all gems and grants gold for each gem removed. Upgrades increase the
     /// amount of gold gained. This represents selling your treasures for money.
     /// </summary>
-    public class Bartering_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class Bartering_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Bartering";
         public override string Name => "Bartering";

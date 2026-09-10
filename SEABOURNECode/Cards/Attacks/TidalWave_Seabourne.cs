@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that deals damage to all enemies based on the number of cards in hand and applies Wet.
     /// </summary>
-    public class TidalWave_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
+    public class TidalWave_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:TidalWave";
         public override string Name => "Tidal Wave";

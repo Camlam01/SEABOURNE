@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that deals damage to all enemies whenever the player plays a modified card.
     /// </summary>
-    public class Idolatry_Seabourne : SeabourneCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class Idolatry_Seabourne() : SeabourneCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Idolatry";
         public override string Name => "Idolatry";

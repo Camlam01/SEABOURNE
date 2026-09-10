@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack that deals damage to all enemies and discards cards from the draw pile.
     /// </summary>
-    public class TideTear_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+    public class TideTear_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:TideTear";
         public override string Name => "Tide Tear";

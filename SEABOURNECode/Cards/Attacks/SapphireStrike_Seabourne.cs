@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that acquires a Sapphire gem and deals damage. Exhausts on play.
     /// </summary>
-    public class SapphireStrike_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    public class SapphireStrike_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:SapphireStrike";
         public override string Name => "Sapphire Strike";

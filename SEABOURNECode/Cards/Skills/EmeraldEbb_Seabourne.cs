@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that acquires an Emerald gem and grants Waterwall. Exhausts on play.
     /// </summary>
-    public class EmeraldEbb_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class EmeraldEbb_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:EmeraldEbb";
         public override string Name => "Emerald Ebb";

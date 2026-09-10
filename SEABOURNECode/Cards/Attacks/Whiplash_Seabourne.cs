@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that reels and deals damage to a single target.
     /// </summary>
-    public class Whiplash_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    public class Whiplash_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Whiplash";
         public override string Name => "Whiplash";

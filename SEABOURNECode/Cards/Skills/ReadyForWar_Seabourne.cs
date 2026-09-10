@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that grants Cast and creates Spiny Cannonball cards.
     /// </summary>
-    public class ReadyForWar_Seabourne : SeabourneCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class ReadyForWar_Seabourne() : SeabourneCard(0, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:ReadyForWar";
         public override string Name => "Ready for War";

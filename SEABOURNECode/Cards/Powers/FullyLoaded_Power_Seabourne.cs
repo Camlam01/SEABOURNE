@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that causes the cannon to automatically fire at the start of each turn. This card has
     /// the Wet keyword so that it is played automatically when reeled. Upgrading reduces its cost.
     /// </summary>
-    public class FullyLoaded_Power_Seabourne : SeabourneCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class FullyLoaded_Power_Seabourne() : SeabourneCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:FullyLoaded_Power";
         public override string Name => "Fully Loaded";

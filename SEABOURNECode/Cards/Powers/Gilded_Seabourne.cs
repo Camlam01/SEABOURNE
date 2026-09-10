@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that rewards the player with energy when their hand is full.
     /// </summary>
-    public class Gilded_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class Gilded_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Gilded";
         public override string Name => "Gilded";

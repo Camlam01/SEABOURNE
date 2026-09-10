@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that grants Slippery and reduces its own cost on subsequent plays.
     /// </summary>
-    public class LiquidMind_Seabourne : SeabourneCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class LiquidMind_Seabourne() : SeabourneCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:LiquidMind";
         public override string Name => "Liquid Mind";

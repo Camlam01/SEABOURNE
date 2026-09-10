@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack that deals damage, grants block and acquires either a Ruby or Sapphire. This card is innate.
     /// </summary>
-    public class FireAndWater_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class FireAndWater_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:FireAndWater";
         public override string Name => "Fire & Water";

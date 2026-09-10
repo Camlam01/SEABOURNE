@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that applies Cast to the player and Weak to all enemies.
     /// </summary>
-    public class Entangle_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.AllEnemies)
+    public class Entangle_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:Entangle";
         public override string Name => "Entangle";

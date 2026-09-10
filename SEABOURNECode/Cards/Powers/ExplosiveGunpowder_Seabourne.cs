@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that causes cannonballs to deal double damage and exhausts itself after use.
     /// </summary>
-    public class ExplosiveGunpowder_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class ExplosiveGunpowder_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:ExplosiveGunpowder";
         public override string Name => "Explosive Gunpowder";

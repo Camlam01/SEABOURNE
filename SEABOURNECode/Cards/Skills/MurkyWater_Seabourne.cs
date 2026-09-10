@@ -11,14 +11,13 @@ using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
     using SEABOURNE.SEABOURNECode.Cards;
-    using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Skills
 {
     /// <summary>
     /// Rare skill that grants a large amount of Waterwall.
     /// </summary>
-    public class MurkyWater_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class MurkyWater_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:MurkyWater";
         public override string Name => "Murky Water";

@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that increases the amount of Cast gained each time the player casts.
     /// </summary>
-    public class Masterbait_Seabourne : SeabourneCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class Masterbait_Seabourne() : SeabourneCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Masterbait";
         public override string Name => "Masterbait";

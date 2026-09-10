@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that applies Trance to an enemy and applies Wet to the card. Upgraded version increases Trance amount.
     /// </summary>
-    public class SirensScreech_Seabourne : SeabourneCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class SirensScreech_Seabourne() : SeabourneCard(3, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:SirensScreech";
         public override string Name => "Siren's Screech";

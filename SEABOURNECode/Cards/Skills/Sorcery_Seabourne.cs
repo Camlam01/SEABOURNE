@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare skill that imbues a chosen card in hand. Exhausts on play.
     /// </summary>
-    public class Sorcery_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class Sorcery_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:Sorcery";
         public override string Name => "Sorcery";

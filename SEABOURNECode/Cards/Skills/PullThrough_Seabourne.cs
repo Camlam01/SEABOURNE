@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that reels the hooked card and grants block.
     /// </summary>
-    public class PullThrough_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class PullThrough_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:PullThrough";
         public override string Name => "Pull Through";

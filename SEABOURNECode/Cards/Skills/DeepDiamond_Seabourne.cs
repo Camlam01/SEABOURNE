@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that acquires a Diamond gem and grants Cast stacks. Exhausts on play.
     /// </summary>
-    public class DeepDiamond_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class DeepDiamond_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:DeepDiamond";
         public override string Name => "Deep Diamond";

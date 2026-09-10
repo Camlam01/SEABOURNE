@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that increases the shrapnel damage dealt by cannonballs.
     /// </summary>
-    public class ShardyShrapnel_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class ShardyShrapnel_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:ShardyShrapnel";
         public override string Name => "Shardy Shrapnel";

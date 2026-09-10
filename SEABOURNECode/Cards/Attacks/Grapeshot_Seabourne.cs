@@ -18,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon cannonball that loads into the cannon, dealing damage and applying Vulnerable when fired.
     /// </summary>
-    public class Grapeshot_Seabourne : SeabourneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class Grapeshot_Seabourne() : SeabourneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Grapeshot";
         public override string Name => "Grapeshot";
@@ -33,10 +33,7 @@ new DamageVar(5, ValueProp.Move).WithUpgrade(5)
             // This card loads into the cannon; when fired it deals damage and applies 1 Vulnerable
             await Task.CompletedTask;
         }
-
-        public override bool ShouldMoveToDiscard() => false;
-
-        protected override void OnUpgrade()
+protected override void OnUpgrade()
         {
             base.OnUpgrade();
             // Damage increases via dynamic variable; vulnerable stacks remain constant

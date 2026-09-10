@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack that deals damage to all enemies equal to the player's current Cast stacks and reels. Upgraded version costs 0 energy.
     /// </summary>
-    public class RodStrangle_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+    public class RodStrangle_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:RodStrangle";
         public override string Name => "Rod Strangle";

@@ -19,7 +19,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// Rare attack that deals damage, grants Cast and reels the hooked card. This card applies Wet
     /// so that when it is reeled it is played immediately. Upgrades increase the damage dealt.
     /// </summary>
-    public class Harpoon_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+    public class Harpoon_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Harpoon";
         public override string Name => "Harpoon";

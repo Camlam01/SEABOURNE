@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Rare attack that deals damage to all enemies, grants block and has multiple Imbued stacks.
     /// </summary>
-    public class MagicMelt_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
+    public class MagicMelt_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:MagicMelt";
         public override string Name => "Magic Melt";
