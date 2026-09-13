@@ -12,27 +12,23 @@ using SEABOURNE.SEABOURNECode.Enums;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
 using SEABOURNE.SEABOURNECode.Cards;
+using SEABOURNE.SEABOURNECode.Cannon;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Attacks
 {
     /// <summary>
     /// Uncommon cannonball that loads into the cannon for a powerful damage payload.
     /// </summary>
-    public class Roundshot_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class Roundshot_Seabourne() : CannonballCard(2, CardRarity.Uncommon)
     {
         public const string ID = "Seabourne:Roundshot";
         public override string Name => "Roundshot";
-        public override string Description => "Load into the cannon. Deals heavy damage when fired.";
+        public override string Description => "Load. When fired, deal {Damage:diff()} damage.";
         public override string PortraitPath => "SEABOURNE/Images/Roundshot";
         protected override HashSet<CardTag> CanonicalTags => [SeabourneTags.Cannonball];
         protected override IEnumerable<DynamicVar> CanonicalVars => [
 new DamageVar(30, ValueProp.Move).WithUpgrade(10)
         ];
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
-        {
-            // This card loads into the cannon; damage is applied when fired
-            await Task.CompletedTask;
-        }
 protected override void OnUpgrade()
         {
             base.OnUpgrade();

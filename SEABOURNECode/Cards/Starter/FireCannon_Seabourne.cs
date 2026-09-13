@@ -10,22 +10,29 @@ using MegaCrit.Sts2.Core.ValueProps;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
 using SEABOURNE.SEABOURNECode.Cards;
+using SEABOURNE.SEABOURNECode.Cannon;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Starter
 {
     /// <summary>
     /// Starter attack which simply fires the Seabourne's cannon. When upgraded the cost is reduced by one.
     /// </summary>
-    public class FireCannon_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Basic, TargetType.AllEnemies)
+    public class FireCannon_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:FireCannon";
         public override string Name => "Fire Cannon";
-        public override string Description => "Fire the cannon. If it is empty, deal {Damage} damage to ALL enemies.";
+        public override string Description => "Fire all loaded Cannonballs at an enemy. If empty, deal {Damage:diff()} damage to ALL enemies.";
         public override string PortraitPath => "SEABOURNE/Images/FireCannon";
         protected override HashSet<CardTag> CanonicalTags => [];
         protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
+            if (CannonCmd.Loaded(Owner).Count > 0)
+            {
+                await CannonCmd.Fire(choiceContext, Owner, play.Target);
+                return;
+            }
+
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this)
                 .TargetingAllOpponents(CombatState!)
