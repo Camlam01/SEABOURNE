@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
+using BaseLib.Utils;
 using SEABOURNE.SEABOURNECode.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Starter
@@ -29,14 +30,12 @@ new BlockVar(5, ValueProp.Move).WithUpgrade(3)
         ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
-            // Grant block to the player
-            await Task.CompletedTask;
+            await CommonActions.CardBlock(this, play);
         }
 
         protected override void OnUpgrade()
         {
-            base.OnUpgrade();
-            // Block increase handled by dynamic variable
+            DynamicVars.Block.UpgradeValueBy(3m);
         }
     }
 }

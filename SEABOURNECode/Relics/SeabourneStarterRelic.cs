@@ -1,16 +1,35 @@
+using BaseLib.Abstracts;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using SEABOURNE.SEABOURNECode.Pools;
+using SEABOURNE.SEABOURNECode.Powers;
 
-namespace SEABOURNE.SEABOURNECode.Relics
+namespace SEABOURNE.SEABOURNECode.Relics;
+
+[Pool(typeof(SeabourneRelicPool))]
+public class SeabourneStarterRelic() : CustomRelicModel
 {
-    /// <summary>
-    /// Temporary placeholder for the future Seabourne starter relic.
-    /// The character currently uses Burning Blood while the custom relic
-    /// behaviour is migrated. Defining the current required rarity keeps this
-    /// model compile-safe without prematurely registering unfinished content.
-    /// </summary>
-    public class SeabourneStarterRelic : RelicModel
+    public override RelicRarity Rarity => RelicRarity.Starter;
+
+    public override List<(string, string)>? Localization => new RelicLoc(
+        "Old Fishing Rod",
+        "At the start of each turn, gain 1 Cast.",
+        "The line always finds its way back.");
+
+    public override async Task AfterEnergyResetLate(Player player)
     {
-        public override RelicRarity Rarity => RelicRarity.Starter;
+        if (player != Owner)
+            return;
+
+        Flash();
+        await PowerCmd.Apply<CastPower>(
+            new ThrowingPlayerChoiceContext(),
+            Owner.Creature,
+            1m,
+            Owner.Creature,
+            null);
     }
 }

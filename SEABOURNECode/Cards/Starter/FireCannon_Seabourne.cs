@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
@@ -19,14 +20,17 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
     {
         public const string ID = "Seabourne:FireCannon";
         public override string Name => "Fire Cannon";
-        public override string Description => "Fire the cannon.";
+        public override string Description => "Fire the cannon. If it is empty, deal {Damage} damage to ALL enemies.";
         public override string PortraitPath => "SEABOURNE/Images/FireCannon";
         protected override HashSet<CardTag> CanonicalTags => [];
-        protected override IEnumerable<DynamicVar> CanonicalVars => [];
+        protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
-            // TODO: implement firing the cannon; this should trigger the cannon's damage effect.
-            await Task.CompletedTask;
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+                .FromCard(this)
+                .TargetingAllOpponents(CombatState)
+                .WithHitFx("vfx/vfx_attack_fire")
+                .Execute(choiceContext);
         }
 
         protected override void OnUpgrade()

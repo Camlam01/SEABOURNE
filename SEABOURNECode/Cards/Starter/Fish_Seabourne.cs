@@ -9,6 +9,8 @@ using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
 using SEABOURNE.SEABOURNECode.Cards;
+using SEABOURNE.SEABOURNECode.Extensions;
+using SEABOURNE.SEABOURNECode.Powers;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Starter
 {
@@ -25,10 +27,14 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
         protected override IEnumerable<DynamicVar> CanonicalVars => [];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
-            // TODO: apply one stack of Cast and then reel cards according to cast count
-            // e.g. await PowerCmd.Apply<CastPower>(state.Owner, 1).Run();
-            // await ReelUtils.ReelAsync(state.Owner);
-            await Task.CompletedTask;
+            await PowerCmd.Apply<CastPower>(
+                choiceContext,
+                Owner.Creature,
+                1m,
+                Owner.Creature,
+                this);
+
+            await ReelUtils.ReelAsync(Owner);
         }
 
         protected override void OnUpgrade()
