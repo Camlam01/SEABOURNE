@@ -39,19 +39,8 @@ namespace SEABOURNE.SEABOURNECode.Powers
             return Task.CompletedTask;
         }
 
-        public override decimal ModifyDamageMultiplicative(
-            Creature? target,
-            decimal amount,
-            ValueProp props,
-            Creature? dealer,
-            CardModel? cardSource,
-            CardPlay? cardPlay)
-        {
-            if (!UsedThisTurn && dealer == Owner && cardSource != null && cardSource.Type == CardType.Attack)
-            {
-                return 1m + (0.2m * Amount);
-            }
-            return 1m;
-        }
+        // The damage modifier hook is intentionally deferred until the gem
+        // vertical slice. Its previous signature belonged to an older STS2
+        // API and prevented the starter character from compiling.
     }
 }
