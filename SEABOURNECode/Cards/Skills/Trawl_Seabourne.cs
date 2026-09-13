@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill with X-cost that grants Cast based on the energy spent and then reels cards.
     /// </summary>
-    public class Trawl_Seabourne : SeabourneCard(int.MinValue, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class Trawl_Seabourne() : SeabourneCard(int.MinValue, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Trawl";
         public override string Name => "Trawl";

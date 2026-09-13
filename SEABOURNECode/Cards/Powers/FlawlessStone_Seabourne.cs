@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that grants a Diamond and modifies Diamonds so that they can apply Wet to any card. When upgraded
     /// the cost is reduced. Actual power application should be handled in OnPlay.
     /// </summary>
-    public class FlawlessStone_Seabourne : SeabourneCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class FlawlessStone_Seabourne() : SeabourneCard(2, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:FlawlessStone";
         public override string Name => "Flawless Stone";

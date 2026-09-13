@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
+using BaseLib.Utils;
 using SEABOURNE.SEABOURNECode.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Starter
@@ -17,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
     /// <summary>
     /// A basic defensive card for Seabourne. Grants block to the player.
     /// </summary>
-    public class Defend_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
+    public class Defend_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
     {
         public const string ID = "Seabourne:Defend";
         public override string Name => "Defend";
@@ -29,14 +30,12 @@ new BlockVar(5, ValueProp.Move).WithUpgrade(3)
         ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
-            // Grant block to the player
-            await Task.CompletedTask;
+            await CommonActions.CardBlock(this, play);
         }
 
         protected override void OnUpgrade()
         {
-            base.OnUpgrade();
-            // Block increase handled by dynamic variable
+            DynamicVars.Block.UpgradeValueBy(3m);
         }
     }
 }

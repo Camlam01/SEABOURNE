@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that converts Waterwall into block and grants Cast. Applies Wet to this card.
     /// </summary>
-    public class RockySeas_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class RockySeas_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:RockySeas";
         public override string Name => "Rocky Seas";

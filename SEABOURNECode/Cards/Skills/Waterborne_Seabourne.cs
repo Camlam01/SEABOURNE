@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that gives a card Wet and grants Waterwall. It targets the player and affects a chosen card in hand.
     /// </summary>
-    public class Waterborne_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class Waterborne_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Waterborne";
         public override string Name => "Waterborne";

@@ -18,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon cannonball that loads into the cannon for a powerful damage payload.
     /// </summary>
-    public class Roundshot_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class Roundshot_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Roundshot";
         public override string Name => "Roundshot";
@@ -33,10 +33,7 @@ new DamageVar(30, ValueProp.Move).WithUpgrade(10)
             // This card loads into the cannon; damage is applied when fired
             await Task.CompletedTask;
         }
-
-        public override bool ShouldMoveToDiscard() => false;
-
-        protected override void OnUpgrade()
+protected override void OnUpgrade()
         {
             base.OnUpgrade();
             // Damage increases via dynamic variable

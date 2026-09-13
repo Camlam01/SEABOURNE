@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that strikes the target multiple times for small damage. Upgraded hits one additional time.
     /// </summary>
-    public class Tackle_Seabourne : SeabourneCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    public class Tackle_Seabourne() : SeabourneCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Tackle";
         public override string Name => "Tackle";

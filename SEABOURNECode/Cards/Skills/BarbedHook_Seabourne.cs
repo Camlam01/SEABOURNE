@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill granting temporary Strength based on the number of cards reeled this turn. Applies Wet.
     /// </summary>
-    public class BarbedHook_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class BarbedHook_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:BarbedHook";
         public override string Name => "Barbed Hook";

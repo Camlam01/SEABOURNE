@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that grants temporary Slippery stacks and permanently reduces its own Slippery.
     /// </summary>
-    public class MucusMask_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class MucusMask_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:MucusMask";
         public override string Name => "Mucus Mask";

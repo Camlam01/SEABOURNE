@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that grants energy and applies Wet. Upgraded version costs one less energy.
     /// </summary>
-    public class PowerOfTheSea_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class PowerOfTheSea_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:PowerOfTheSea";
         public override string Name => "Power of the Sea";

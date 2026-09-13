@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack that deals damage, applies Vulnerable and has the Imbued modifier.
     /// </summary>
-    public class SoulStab_Seabourne : SeabourneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class SoulStab_Seabourne() : SeabourneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:SoulStab";
         public override string Name => "Soul Stab";

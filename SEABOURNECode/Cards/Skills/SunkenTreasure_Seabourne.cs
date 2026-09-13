@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that acquires either an Emerald or Amber and grants Cast. This card is innate.
     /// </summary>
-    public class SunkenTreasure_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class SunkenTreasure_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:SunkenTreasure";
         public override string Name => "Sunken Treasure";

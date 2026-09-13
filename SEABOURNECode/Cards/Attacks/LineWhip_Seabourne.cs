@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that reels, deals damage to all enemies and applies Vulnerable.
     /// </summary>
-    public class LineWhip_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
+    public class LineWhip_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:LineWhip";
         public override string Name => "Line Whip";

@@ -1,15 +1,34 @@
-using MegaCrit.Sts2.Core.Models;
+using BaseLib.Abstracts;
+using BaseLib.Utils;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Entities.Relics;
+using SEABOURNE.SEABOURNECode.Pools;
+using SEABOURNE.SEABOURNECode.Powers;
 
-namespace SEABOURNE.SEABOURNECode.Relics
+namespace SEABOURNE.SEABOURNECode.Relics;
+
+[Pool(typeof(SeabourneRelicPool))]
+public class SeabourneStarterRelic() : CustomRelicModel
 {
-    /// <summary>
-    /// Placeholder starter relic for the Seabourne character.  When the
-    /// Slay the Spire 2 API is available, inherit from RelicModel and
-    /// implement any behaviour this relic should provide.  This stub
-    /// implementation is empty and serves only to satisfy compile‑time
-    /// dependencies.
-    /// </summary>
-    public class SeabourneStarterRelic : RelicModel
+    public override RelicRarity Rarity => RelicRarity.Starter;
+
+    public override List<(string, string)>? Localization => new RelicLoc(
+        "Old Fishing Rod",
+        "At the start of each turn, gain 1 Cast.",
+        "The line always finds its way back.");
+
+    public override async Task AfterEnergyResetLate(Player player)
     {
+        if (player != Owner)
+            return;
+
+        Flash();
+        await PowerCmd.Apply<CastPower>(
+            [Owner.Creature],
+            1m,
+            Owner.Creature,
+            null,
+            false);
     }
 }

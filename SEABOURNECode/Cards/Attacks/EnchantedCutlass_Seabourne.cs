@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Rare attack dealing heavy damage and granting multiple Imbued stacks.
     /// </summary>
-    public class EnchantedCutlass_Seabourne : SeabourneCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+    public class EnchantedCutlass_Seabourne() : SeabourneCard(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:EnchantedCutlass";
         public override string Name => "Enchanted Cutlass";

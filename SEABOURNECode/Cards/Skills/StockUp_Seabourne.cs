@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that adds a number of Cannonball cards to the player's hand. Exhausts on play.
     /// </summary>
-    public class StockUp_Seabourne : SeabourneCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class StockUp_Seabourne() : SeabourneCard(0, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:StockUp";
         public override string Name => "Stock Up";

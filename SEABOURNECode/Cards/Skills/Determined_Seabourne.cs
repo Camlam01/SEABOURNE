@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that empowers enemies and grants the player Slippery for the turn.
     /// </summary>
-    public class Determined_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies)
+    public class Determined_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:Determined";
         public override string Name => "Determined";

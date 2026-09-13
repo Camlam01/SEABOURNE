@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that causes the first card reeled each turn to become imbued without consuming gem charges.
     /// When upgraded the effect applies to the first two cards reeled each turn.
     /// </summary>
-    public class EnchantedRod_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class EnchantedRod_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:EnchantedRod";
         public override string Name => "Enchanted Rod";

@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that grants block based on the number of cards in hand.
     /// </summary>
-    public class Riptide_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class Riptide_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Riptide";
         public override string Name => "Riptide";

@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// Rare attack that fires the cannon and reloads any cannonballs that were fired. When upgraded
     /// the energy cost is reduced.
     /// </summary>
-    public class Hookshot_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
+    public class Hookshot_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Hookshot";
         public override string Name => "Hookshot";

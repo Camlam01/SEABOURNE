@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack that deals damage and applies Weak to all enemies while acquiring a Diamond or Opal. This card is innate.
     /// </summary>
-    public class YinYang_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
+    public class YinYang_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Uncommon, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:YinYang";
         public override string Name => "Yin & Yang";

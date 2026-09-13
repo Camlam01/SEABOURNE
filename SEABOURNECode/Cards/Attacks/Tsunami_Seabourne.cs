@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Uncommon attack dealing significant damage and granting Waterwall to the player.
     /// </summary>
-    public class Tsunami_Seabourne : SeabourneCard(3, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class Tsunami_Seabourne() : SeabourneCard(3, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Tsunami";
         public override string Name => "Tsunami";

@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack dealing substantial damage and applying Wet to the target.
     /// </summary>
-    public class SwashbucklingStrike_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    public class SwashbucklingStrike_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:SwashbucklingStrike";
         public override string Name => "Swashbuckling Strike";

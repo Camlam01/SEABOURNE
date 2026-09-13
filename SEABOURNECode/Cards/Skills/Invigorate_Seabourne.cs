@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that recharges all of the player's gems. It exhausts when played.
     /// </summary>
-    public class Invigorate_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class Invigorate_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:Invigorate";
         public override string Name => "Invigorate";

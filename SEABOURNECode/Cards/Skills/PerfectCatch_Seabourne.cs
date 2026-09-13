@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Rare skill that reels cards and enchants the first few reeled cards without spending gem charges.
     /// </summary>
-    public class PerfectCatch_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
+    public class PerfectCatch_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:PerfectCatch";
         public override string Name => "Perfect Catch";

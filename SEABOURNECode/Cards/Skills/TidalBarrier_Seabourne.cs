@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that grants Waterwall multiple times.
     /// </summary>
-    public class TidalBarrier_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class TidalBarrier_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:TidalBarrier";
         public override string Name => "Tidal Barrier";

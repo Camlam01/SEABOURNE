@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Uncommon skill that reels and loads all cannonballs in the player's hand into the cannon. Upgraded version costs one less energy.
     /// </summary>
-    public class FullyLoaded_Skill_Seabourne : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
+    public class FullyLoaded_Skill_Seabourne() : SeabourneCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:FullyLoaded_Skill";
         public override string Name => "Fully Loaded";

@@ -41,14 +41,8 @@ namespace SEABOURNE.SEABOURNECode.Powers
             return Task.CompletedTask;
         }
 
-        public override decimal ModifyBlockMultiplicative(Creature target, decimal block, ValueProp props, CardModel? cardSource, CardPlay? cardPlay)
-        {
-            // Increase block produced by skill cards before the gem has been used.
-            if (!UsedThisTurn && target == base.Owner && cardSource != null && cardSource.Type == CardType.Skill)
-            {
-                return 1m + (0.2m * base.Amount);
-            }
-            return 1m;
-        }
+        // The block modifier hook is intentionally deferred until the gem
+        // vertical slice. Its previous signature belonged to an older STS2
+        // API and prevented the starter character from compiling.
     }
 }

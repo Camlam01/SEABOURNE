@@ -1,5 +1,4 @@
 using Godot;
-using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
 
 namespace SEABOURNE.SEABOURNECode
@@ -14,9 +13,7 @@ namespace SEABOURNE.SEABOURNECode
 
         public static void Initialize()
         {
-            Harmony harmony = new(ModId);
-
-            harmony.PatchAll();
+            Logger.Info("Seabourne initialized.");
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that grants block every time the player gains Cast.
     /// </summary>
-    public class FishermansFortitude_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class FishermansFortitude_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:FishermansFortitude";
         public override string Name => "Fisherman's Fortitude";

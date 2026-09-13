@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that acquires an Amber gem and deals heavy damage. Exhausts on play.
     /// </summary>
-    public class AmberAnguish_Seabourne : SeabourneCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    public class AmberAnguish_Seabourne() : SeabourneCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:AmberAnguish";
         public override string Name => "Amber Anguish";

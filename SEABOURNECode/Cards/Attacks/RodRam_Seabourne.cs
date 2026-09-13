@@ -18,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// <summary>
     /// Common attack that grants Cast and deals damage.
     /// </summary>
-    public class RodRam_Seabourne : SeabourneCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+    public class RodRam_Seabourne() : SeabourneCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:RodRam";
         public override string Name => "Rod Ram";

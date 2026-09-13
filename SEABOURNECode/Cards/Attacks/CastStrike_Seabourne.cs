@@ -12,14 +12,13 @@ using SEABOURNE.SEABOURNECode.DynamicVars;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
     using SEABOURNE.SEABOURNECode.Cards;
-    using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Attacks
 {
     /// <summary>
     /// Uncommon attack that grants Cast and deals damage based on the energy cost of the hooked card.
     /// </summary>
-    public class CastStrike_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class CastStrike_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:CastStrike";
         public override string Name => "Cast Strike";

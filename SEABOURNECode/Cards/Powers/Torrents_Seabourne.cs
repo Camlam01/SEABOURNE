@@ -17,7 +17,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// <summary>
     /// Uncommon power that grants Waterwall and reflects deflected damage back at enemies.
     /// </summary>
-    public class Torrents_Seabourne : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+    public class Torrents_Seabourne() : SeabourneCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
     {
         public const string ID = "Seabourne:Torrents";
         public override string Name => "Torrents";

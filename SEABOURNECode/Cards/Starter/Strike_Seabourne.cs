@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 // Removed invalid Enums namespace. Enumerations are resolved via global imports or the Entities.Cards namespace.
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
+using BaseLib.Utils;
 using SEABOURNE.SEABOURNECode.Cards;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Starter
@@ -17,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
     /// <summary>
     /// A basic attack card for Seabourne. Deals moderate damage to a single enemy.
     /// </summary>
-    public class Strike_Seabourne : SeabourneCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
+    public class Strike_Seabourne() : SeabourneCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
     {
         public const string ID = "Seabourne:Strike";
         public override string Name => "Strike";
@@ -29,14 +30,12 @@ new DamageVar(6, ValueProp.Move).WithUpgrade(3)
         ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
-            // Deal damage to the selected enemy
-            await Task.CompletedTask;
+            await CommonActions.CardAttack(this, play).Execute(choiceContext);
         }
 
         protected override void OnUpgrade()
         {
-            base.OnUpgrade();
-            // Damage increase handled by dynamic variable
+            DynamicVars.Damage.UpgradeValueBy(3m);
         }
     }
 }

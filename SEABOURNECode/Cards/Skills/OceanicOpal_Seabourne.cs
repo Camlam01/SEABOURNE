@@ -15,7 +15,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that acquires an Opal gem and reels the hooked card. Exhausts on play.
     /// </summary>
-    public class OceanicOpal_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class OceanicOpal_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:OceanicOpal";
         public override string Name => "Oceanic Opal";

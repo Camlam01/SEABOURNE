@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 using SEABOURNE.SEABOURNECode.Cards.Starter;
 using SEABOURNE.SEABOURNECode.Pools;
+using SEABOURNE.SEABOURNECode.Relics;
 
 namespace SEABOURNE.SEABOURNECode.Characters;
 
@@ -42,10 +43,8 @@ public class SeabourneCharacter : PlaceholderCharacterModel
         ModelDb.Card<Defend_Seabourne>()
     ];
 
-    // Temporary compile-safe starter relic while SeabourneStarterRelic is
-    // migrated to the current BaseLib relic API.
     public override IReadOnlyList<RelicModel> StartingRelics =>
     [
-        ModelDb.Relic<BurningBlood>()
+        ModelDb.Relic<SeabourneStarterRelic>()
     ];
 }

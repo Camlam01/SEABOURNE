@@ -19,7 +19,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Attacks
     /// to all enemies and creates a copy of itself in the discard pile. This card has the Wet keyword so
     /// that it is played automatically when reeled. Upgrades increase the numbers slightly.
     /// </summary>
-    public class Tidepool_Seabourne : SeabourneCard(3, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
+    public class Tidepool_Seabourne() : SeabourneCard(3, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
     {
         public const string ID = "Seabourne:Tidepool";
         public override string Name => "Tidepool";

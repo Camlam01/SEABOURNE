@@ -16,7 +16,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Powers
     /// Rare power that grants all of your cards Imbued 1. This card is Ethereal, meaning it vanishes
     /// if not played. Upgrading does not change its cost or basic effect.
     /// </summary>
-    public class SorcererForm_Seabourne : SeabourneCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
+    public class SorcererForm_Seabourne() : SeabourneCard(3, CardType.Power, CardRarity.Rare, TargetType.Self)
     {
         public const string ID = "Seabourne:SorcererForm";
         public override string Name => "Sorcerer Form";

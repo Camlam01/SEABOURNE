@@ -18,7 +18,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Skills
     /// <summary>
     /// Common skill that grants Cast and block. Cast causes the hooked card to move deeper into the discard pile.
     /// </summary>
-    public class Flub_Seabourne : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
+    public class Flub_Seabourne() : SeabourneCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
     {
         public const string ID = "Seabourne:Flub";
         public override string Name => "Flub";

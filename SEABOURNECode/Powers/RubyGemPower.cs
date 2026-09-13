@@ -9,8 +9,6 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Entities.Players;
 using BaseLib.Abstracts;
 using BaseLib.Utils;
-
-// Import models namespace for PowerType definitions.
 using MegaCrit.Sts2.Core.Models;
 
 namespace SEABOURNE.SEABOURNECode.Powers
@@ -28,9 +26,6 @@ namespace SEABOURNE.SEABOURNECode.Powers
         public override string? CustomBigIconPath =>
             "res://mods/SEABOURNE/images/powers/RubyGemPower.png";
 
-        /// <summary>
-        /// When the first attack card is played this turn the gem triggers and marks itself used.
-        /// </summary>
         protected override Task OnCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
         {
             CardModel card = cardPlay.Card;
@@ -39,22 +34,13 @@ namespace SEABOURNE.SEABOURNECode.Powers
                 return Task.CompletedTask;
             }
 
-            // Trigger the gem: flash and mark used.
-            this.Flash();
+            Flash();
             MarkUsed();
             return Task.CompletedTask;
         }
 
-        /// <inheritdoc/>
-        public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
-        {
-            // Only modify attack damage dealt by our owner before the gem has been used.
-            if (!UsedThisTurn && dealer == base.Owner && cardSource != null && cardSource.Type == CardType.Attack)
-            {
-                // 20% per stack.
-                return 1m + (0.2m * base.Amount);
-            }
-            return 1m;
-        }
+        // The damage modifier hook is intentionally deferred until the gem
+        // vertical slice. Its previous signature belonged to an older STS2
+        // API and prevented the starter character from compiling.
     }
 }
