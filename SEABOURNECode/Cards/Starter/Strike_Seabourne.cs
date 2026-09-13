@@ -30,7 +30,7 @@ new DamageVar(6, ValueProp.Move).WithUpgrade(3)
         ];
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
-            await CommonActions.CardAttack(this, play.Target).Execute(choiceContext);
+            await CommonActions.CardAttack(this, play).Execute(choiceContext);
         }
 
         protected override void OnUpgrade()

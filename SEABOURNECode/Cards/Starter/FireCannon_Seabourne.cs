@@ -28,7 +28,7 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
         {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this)
-                .TargetingAllOpponents(CombatState)
+                .TargetingAllOpponents(CombatState!)
                 .WithHitFx("vfx/vfx_attack_fire")
                 .Execute(choiceContext);
         }

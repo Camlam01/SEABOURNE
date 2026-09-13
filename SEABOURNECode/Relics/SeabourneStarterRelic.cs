@@ -3,7 +3,6 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
-using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using SEABOURNE.SEABOURNECode.Pools;
 using SEABOURNE.SEABOURNECode.Powers;
 
@@ -26,10 +25,10 @@ public class SeabourneStarterRelic() : CustomRelicModel
 
         Flash();
         await PowerCmd.Apply<CastPower>(
-            new ThrowingPlayerChoiceContext(),
-            Owner.Creature,
+            [Owner.Creature],
             1m,
             Owner.Creature,
-            null);
+            null,
+            false);
     }
 }

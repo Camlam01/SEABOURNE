@@ -28,11 +28,11 @@ namespace SEABOURNE.SEABOURNECode.Cards.Starter
         protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
         {
             await PowerCmd.Apply<CastPower>(
-                choiceContext,
-                Owner.Creature,
+                [Owner.Creature],
                 1m,
                 Owner.Creature,
-                this);
+                this,
+                false);
 
             await ReelUtils.ReelAsync(Owner);
         }
