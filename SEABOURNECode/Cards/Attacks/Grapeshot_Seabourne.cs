@@ -12,26 +12,32 @@ using SEABOURNE.SEABOURNECode.Enums;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
 using SEABOURNE.SEABOURNECode.Cards;
+using SEABOURNE.SEABOURNECode.Cannon;
+using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace SEABOURNE.SEABOURNECode.Cards.Attacks
 {
     /// <summary>
     /// Uncommon cannonball that loads into the cannon, dealing damage and applying Vulnerable when fired.
     /// </summary>
-    public class Grapeshot_Seabourne() : SeabourneCard(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
+    public class Grapeshot_Seabourne() : CannonballCard(0, CardRarity.Uncommon)
     {
         public const string ID = "Seabourne:Grapeshot";
         public override string Name => "Grapeshot";
-        public override string Description => "Load into the cannon. Deals damage and applies Vulnerable when fired.";
+        public override string Description => "Load. When fired, deal {Damage:diff()} damage and apply 1 Vulnerable.";
         public override string PortraitPath => "SEABOURNE/Images/Grapeshot";
         protected override HashSet<CardTag> CanonicalTags => [SeabourneTags.Cannonball];
         protected override IEnumerable<DynamicVar> CanonicalVars => [
 new DamageVar(5, ValueProp.Move).WithUpgrade(5)
         ];
-        protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay play)
+        protected override async Task OnFire(PlayerChoiceContext choiceContext, CardPlay play)
         {
-            // This card loads into the cannon; when fired it deals damage and applies 1 Vulnerable
-            await Task.CompletedTask;
+            await base.OnFire(choiceContext, play);
+            if (play.Target is not null && play.Target.IsAlive)
+            {
+                await PowerCmd.Apply<VulnerablePower>(
+                    [play.Target], 1m, Owner.Creature, this, false);
+            }
         }
 protected override void OnUpgrade()
         {
