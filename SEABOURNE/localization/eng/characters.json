@@ -12,9 +12,5 @@
   "SEABOURNE-SEABOURNE_CHARACTER.cardsModifierTitle": "Treasures of the Deep",
   "SEABOURNE-SEABOURNE_CHARACTER.cardsModifierDescription": "Gems, Wet, Cast, Reel, Cannonballs.",
   "SEABOURNE-SEABOURNE_CHARACTER.banter.alive.endTurnPing": "The tide turns.",
-  "SEABOURNE-SEABOURNE_CHARACTER.banter.dead.endTurnPing": "The sea falls silent.",
-  "THE_ARCHITECT.talk.SEABOURNE-SEABOURNE_CHARACTER.0-0r.char": "The sea answers my call.",
-  "THE_ARCHITECT.talk.SEABOURNE-SEABOURNE_CHARACTER.0-0r.next": "And I answer its pull.",
-  "THE_ARCHITECT.talk.SEABOURNE-SEABOURNE_CHARACTER.0-1r.ancient": "Ancient waters remember.",
-  "THE_ARCHITECT.talk.SEABOURNE-SEABOURNE_CHARACTER.0-attack": "Hear my song."
+  "SEABOURNE-SEABOURNE_CHARACTER.banter.dead.endTurnPing": "The sea falls silent."
 }
